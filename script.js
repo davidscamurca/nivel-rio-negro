@@ -162,17 +162,21 @@ function createYearlyChart(data) {
     const currentYear = new Date().getFullYear();
     const traces = [];
     
-    // Encontrar o último dia disponível em 2025 (dia atual da série)
-    const data2025 = data.filter(d => d.date.getFullYear() === 2025);
+    // Encontrar o último dia disponível no ano mais atual dos dados
+    const yearsWithData = [...new Set(data.map(d => d.date.getFullYear()))].sort((a, b) => b - a);
+    const mostRecentYear = yearsWithData[0];
+    const mostRecentYearData = data.filter(d => d.date.getFullYear() === mostRecentYear);
+    
     let referenceDayMonth = null;
     let referenceIndex = null;
     
-    if (data2025.length > 0) {
-        const lastDate2025 = data2025[data2025.length - 1].date;
+    if (mostRecentYearData.length > 0) {
+        const lastDate = mostRecentYearData[mostRecentYearData.length - 1].date;
         const monthAbbr = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-        referenceDayMonth = `${String(lastDate2025.getDate()).padStart(2, "0")}-${monthAbbr[lastDate2025.getMonth()]}`;
+        referenceDayMonth = `${String(lastDate.getDate()).padStart(2, "0")}-${monthAbbr[lastDate.getMonth()]}`;
         referenceIndex = dayMonthLabels.indexOf(referenceDayMonth);
-        console.log(`Dia de referência: ${referenceDayMonth} (índice: ${referenceIndex})`);
+        console.log(`Último dia disponível (${mostRecentYear}): ${referenceDayMonth} (índice: ${referenceIndex})`);
+        console.log(`Data de referência: ${lastDate.toLocaleDateString("pt-BR")}`);
     }
     
     // Processar dados para cada ano
@@ -208,14 +212,14 @@ function createYearlyChart(data) {
         }
     }
     
-    // Adicionar linha vertical no dia de referência (se encontrado)
+    // Adicionar linha vertical no dia de referência (último dia disponível)
     if (referenceDayMonth && referenceIndex !== -1) {
         traces.push({
             x: [referenceDayMonth, referenceDayMonth],
             y: [15, 35], // Ajustado para não forçar o eixo Y a incluir 0
             type: "scatter",
             mode: "lines",
-            name: "Hoje",
+            name: "Último dado",
             line: {
                 color: "rgba(255, 0, 0, 0.8)",
                 width: 2,
@@ -290,7 +294,7 @@ function createYearlyChart(data) {
             y: 0.95,
             xref: "x",
             yref: "paper",
-            text: `Hoje: ${referenceDayMonth}`,
+            text: `Último dado: ${referenceDayMonth}`,
             showarrow: true,
             arrowhead: 2,
             arrowsize: 1,
