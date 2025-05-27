@@ -1,15 +1,8 @@
 // Importando funções utilitárias
 import {
-    formatDate,
-    parseDate,
     calculateMovingAverage,
-    filterDataByYear,
-    filterDataByPeriod,
-    getStatistics,
-    getUniqueYears,
-    groupDataByYear,
-    calculatePercentiles
-} from './js/utils.js';
+    getStatistics
+} from "./js/utils.js";
 
 // Variáveis globais
 let allData = [];
@@ -18,27 +11,27 @@ let allData = [];
 const colors = {
     // Cores para o gráfico de médias móveis
     daily: {
-        level: '#0072B2',    // Azul
-        ma6m: '#D55E00',     // Laranja
-        ma1y: '#CC79A7',     // Rosa
-        ma2y: '#009E73'      // Verde
+        level: "#0072B2",    // Azul
+        ma6m: "#D55E00",     // Laranja
+        ma1y: "#CC79A7",     // Rosa
+        ma2y: "#009E73"      // Verde
     },
     // Cores para o gráfico anual (cores do matplotlib)
     yearly: {
-        2019: '#1f77b4',     // Azul
-        2020: '#ff7f0e',     // Laranja
-        2021: '#2ca02c',     // Verde
-        2022: '#d62728',     // Vermelho
-        2023: '#9467bd',     // Roxo
-        2024: '#8c564b',     // Marrom
-        2025: '#e377c2'      // Rosa
+        2019: "#1f77b4",     // Azul
+        2020: "#ff7f0e",     // Laranja
+        2021: "#2ca02c",     // Verde
+        2022: "#d62728",     // Vermelho
+        2023: "#9467bd",     // Roxo
+        2024: "#8c564b",     // Marrom
+        2025: "#e377c2"      // Rosa
     }
 };
 
 // Funções auxiliares para replicar o comportamento do Python
 
 // Remove outliers pelo método IQR (igual ao Python)
-function removeOutliersIQR(data, key = 'level') {
+function removeOutliersIQR(data, key = "level") {
     const values = data.map(d => d[key]).sort((a, b) => a - b);
     const q1 = values[Math.floor(values.length * 0.25)];
     const q3 = values[Math.floor(values.length * 0.75)];
@@ -50,13 +43,13 @@ function removeOutliersIQR(data, key = 'level') {
 
 // Gera labels de dia-mês (igual ao Python)
 function generateDayMonthLabels() {
-    const monthAbbr = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const monthAbbr = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
     const daysInMonth = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]; // 2020 é bissexto
     const labels = [];
     
     for (let m = 0; m < 12; m++) {
         for (let d = 1; d <= daysInMonth[m]; d++) {
-            labels.push(`${String(d).padStart(2, '0')}-${monthAbbr[m]}`);
+            labels.push(`${String(d).padStart(2, "0")}-${monthAbbr[m]}`);
         }
     }
     return labels;
@@ -64,11 +57,11 @@ function generateDayMonthLabels() {
 
 // Deduplica dados por dia-mês (mantém o último registro, igual ao Python)
 function deduplicateByDayMonth(data) {
-    const monthAbbr = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const monthAbbr = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
     const map = new Map();
     
     data.forEach(d => {
-        const dayMonth = `${String(d.date.getDate()).padStart(2, '0')}-${monthAbbr[d.date.getMonth()]}`;
+        const dayMonth = `${String(d.date.getDate()).padStart(2, "0")}-${monthAbbr[d.date.getMonth()]}`;
         map.set(dayMonth, d.level); // sobrescreve, mantendo o último
     });
     
@@ -76,32 +69,32 @@ function deduplicateByDayMonth(data) {
 }
 
 // Inicialização quando a página carrega
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener("DOMContentLoaded", function() {
     initializeApp();
 });
 
 // Função para inicializar a aplicação
 async function initializeApp() {
-    console.log('Iniciando aplicação...');
+    console.log("Iniciando aplicação...");
     try {
         await loadData();
         updateUI();
     } catch (error) {
-        console.error('Erro ao inicializar a aplicação:', error);
-        alert('Erro ao carregar os dados. Por favor, tente novamente mais tarde.');
+        console.error("Erro ao inicializar a aplicação:", error);
+        alert("Erro ao carregar os dados. Por favor, tente novamente mais tarde.");
     }
 }
 
 // Função para carregar os dados
 async function loadData() {
-    console.log('Carregando dados...');
+    console.log("Carregando dados...");
     try {
-        const response = await fetch('/data/rio-negro-data.json');
+        const response = await fetch("/data/rio-negro-data.json");
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const rawData = await response.json();
-        console.log('Dados brutos recebidos:', rawData.length, 'registros');
+        console.log("Dados brutos recebidos:", rawData.length, "registros");
 
         // Processar os dados
         allData = rawData.map(item => ({
@@ -109,18 +102,18 @@ async function loadData() {
             level: parseFloat(item.nivel_rio)
         })).sort((a, b) => a.date - b.date);
 
-        console.log('Dados processados:', allData.length, 'registros');
-        console.log('Primeiro registro:', allData[0]);
-        console.log('Último registro:', allData[allData.length - 1]);
+        console.log("Dados processados:", allData.length, "registros");
+        console.log("Primeiro registro:", allData[0]);
+        console.log("Último registro:", allData[allData.length - 1]);
     } catch (error) {
-        console.error('Erro ao carregar dados:', error);
+        console.error("Erro ao carregar dados:", error);
         throw error;
     }
 }
 
 // Função para atualizar a interface
 function updateUI() {
-    console.log('Atualizando interface...');
+    console.log("Atualizando interface...");
     
     // Atualizar estatísticas (sem outliers para consistência)
     const dataNoOutliers = removeOutliersIQR(allData);
@@ -134,12 +127,12 @@ function updateUI() {
 
 // Função para atualizar as estatísticas
 function updateStatistics(stats) {
-    document.getElementById('current-level').textContent = stats.current.toFixed(2);
-    document.getElementById('trend').textContent = stats.trend.toFixed(2);
-    document.getElementById('max-level').textContent = stats.max.toFixed(2);
-    document.getElementById('min-level').textContent = stats.min.toFixed(2);
-    document.getElementById('total-readings').textContent = stats.total;
-    document.getElementById('avg-level').textContent = stats.average.toFixed(2);
+    document.getElementById("current-level").textContent = stats.current.toFixed(2);
+    document.getElementById("trend").textContent = stats.trend.toFixed(2);
+    document.getElementById("max-level").textContent = stats.max.toFixed(2);
+    document.getElementById("min-level").textContent = stats.min.toFixed(2);
+    document.getElementById("total-readings").textContent = stats.total;
+    document.getElementById("avg-level").textContent = stats.average.toFixed(2);
 }
 
 // Função para criar o gráfico anual com Plotly (MUITO mais simples!)
@@ -155,8 +148,8 @@ function createYearlyChart(data) {
     
     if (data2025.length > 0) {
         const lastDate2025 = data2025[data2025.length - 1].date;
-        const monthAbbr = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-        referenceDayMonth = `${String(lastDate2025.getDate()).padStart(2, '0')}-${monthAbbr[lastDate2025.getMonth()]}`;
+        const monthAbbr = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+        referenceDayMonth = `${String(lastDate2025.getDate()).padStart(2, "0")}-${monthAbbr[lastDate2025.getMonth()]}`;
         referenceIndex = dayMonthLabels.indexOf(referenceDayMonth);
         console.log(`Dia de referência: ${referenceDayMonth} (índice: ${referenceIndex})`);
     }
@@ -182,8 +175,8 @@ function createYearlyChart(data) {
             traces.push({
                 x: dayMonthLabels,
                 y: yValues,
-                type: 'scatter',
-                mode: 'lines',
+                type: "scatter",
+                mode: "lines",
                 name: `COTA ${year}`,
                 line: {
                     color: colors.yearly[year],
@@ -199,16 +192,16 @@ function createYearlyChart(data) {
         traces.push({
             x: [referenceDayMonth, referenceDayMonth],
             y: [0, 35], // Ajustar conforme o range dos seus dados
-            type: 'scatter',
-            mode: 'lines',
-            name: 'Dia Atual',
+            type: "scatter",
+            mode: "lines",
+            name: "Dia Atual",
             line: {
-                color: 'rgba(255, 0, 0, 0.8)',
+                color: "rgba(255, 0, 0, 0.8)",
                 width: 2,
-                dash: 'dash'
+                dash: "dash"
             },
             showlegend: true,
-            hoverinfo: 'skip'
+            hoverinfo: "skip"
         });
         
         // Adicionar pontos destacados no dia de referência para cada ano
@@ -222,15 +215,15 @@ function createYearlyChart(data) {
                     traces.push({
                         x: [referenceDayMonth],
                         y: [valueAtReference],
-                        type: 'scatter',
-                        mode: 'markers',
+                        type: "scatter",
+                        mode: "markers",
                         name: `${year}: ${valueAtReference.toFixed(2)}m`,
                         marker: {
                             color: colors.yearly[year],
                             size: 8,
-                            symbol: 'circle',
+                            symbol: "circle",
                             line: {
-                                color: 'white',
+                                color: "white",
                                 width: 2
                             }
                         },
@@ -238,7 +231,7 @@ function createYearlyChart(data) {
                         hovertemplate: `<b>COTA ${year}</b><br>` +
                                      `Data: ${referenceDayMonth}<br>` +
                                      `Nível: ${valueAtReference.toFixed(2)}m<br>` +
-                                     '<extra></extra>'
+                                     "<extra></extra>"
                     });
                 }
             }
@@ -247,52 +240,52 @@ function createYearlyChart(data) {
     
     const layout = {
         title: {
-            text: 'Comparação de Níveis do Rio (2019-2025)',
-            font: { size: 18, family: 'Inter' }
+            text: "Comparação de Níveis do Rio (2019-2025)",
+            font: { size: 18, family: "Inter" }
         },
         xaxis: {
-            title: 'Data (Dia-Mês)',
-            tickmode: 'array',
-            tickvals: dayMonthLabels.filter((label, index) => label.startsWith('01-')),
-            ticktext: dayMonthLabels.filter((label, index) => label.startsWith('01-')).map(label => label.split('-')[1]),
+            title: "Data (Dia-Mês)",
+            tickmode: "array",
+            tickvals: dayMonthLabels.filter((label) => label.startsWith("01-")),
+            ticktext: dayMonthLabels.filter((label) => label.startsWith("01-")).map(label => label.split("-")[1]),
             showgrid: false
         },
         yaxis: {
-            title: 'Nível do Rio (m)',
+            title: "Nível do Rio (m)",
             showgrid: false
         },
         legend: {
-            orientation: 'h',
+            orientation: "h",
             x: 0.5,
-            xanchor: 'center',
+            xanchor: "center",
             y: -0.15,
-            bgcolor: 'rgba(255,255,255,0.9)',
-            bordercolor: 'rgba(0,0,0,0.1)',
+            bgcolor: "rgba(255,255,255,0.9)",
+            bordercolor: "rgba(0,0,0,0.1)",
             borderwidth: 1
         },
         margin: { l: 60, r: 30, t: 80, b: 100 },
-        font: { family: 'Inter' },
-        width: 900,
+        font: { family: "Inter" },
+        width: 1100,
         height: 500,
         annotations: referenceDayMonth ? [{
             x: referenceDayMonth,
             y: 0.95,
-            xref: 'x',
-            yref: 'paper',
+            xref: "x",
+            yref: "paper",
             text: `Dia Atual: ${referenceDayMonth}`,
             showarrow: true,
             arrowhead: 2,
             arrowsize: 1,
             arrowwidth: 2,
-            arrowcolor: 'red',
+            arrowcolor: "red",
             ax: 0,
             ay: -30,
             font: {
-                color: 'red',
+                color: "red",
                 size: 12
             },
-            bgcolor: 'rgba(255,255,255,0.9)',
-            bordercolor: 'red',
+            bgcolor: "rgba(255,255,255,0.9)",
+            bordercolor: "red",
             borderwidth: 1
         }] : []
     };
@@ -302,7 +295,7 @@ function createYearlyChart(data) {
         displayModeBar: false
     };
     
-    Plotly.newPlot('yearlyChart', traces, layout, config);
+    Plotly.newPlot("yearlyChart", traces, layout, config);
 }
 
 // Função para criar o gráfico de médias móveis com Plotly (MUITO mais simples!)
@@ -322,62 +315,62 @@ function createDailyChart(data) {
         {
             x: dates,
             y: dataNoOutliers.map(d => d.level),
-            type: 'scatter',
-            mode: 'lines',
-            name: 'Nível do Rio',
+            type: "scatter",
+            mode: "lines",
+            name: "Nível do Rio",
             line: { color: colors.daily.level, width: 1.5 }
         },
         {
             x: dates,
             y: ma6m,
-            type: 'scatter',
-            mode: 'lines',
-            name: 'MM 6M',
-            line: { color: colors.daily.ma6m, width: 1, dash: 'dash' }
+            type: "scatter",
+            mode: "lines",
+            name: "MM 6M",
+            line: { color: colors.daily.ma6m, width: 1, dash: "dash" }
         },
         {
             x: dates,
             y: ma1y,
-            type: 'scatter',
-            mode: 'lines',
-            name: 'MM 1A',
-            line: { color: colors.daily.ma1y, width: 1.5, dash: 'dashdot' }
+            type: "scatter",
+            mode: "lines",
+            name: "MM 1A",
+            line: { color: colors.daily.ma1y, width: 1.5, dash: "dashdot" }
         },
         {
             x: dates,
             y: ma2y,
-            type: 'scatter',
-            mode: 'lines',
-            name: 'MM 2A',
-            line: { color: colors.daily.ma2y, width: 2, dash: 'dot' }
+            type: "scatter",
+            mode: "lines",
+            name: "MM 2A",
+            line: { color: colors.daily.ma2y, width: 2, dash: "dot" }
         }
     ];
     
     const layout = {
         title: {
-            text: 'Nível do Rio e Médias Móveis',
-            font: { size: 18, family: 'Inter' }
+            text: "Nível do Rio e Médias Móveis",
+            font: { size: 18, family: "Inter" }
         },
         xaxis: {
-            title: 'Data',
+            title: "Data",
             showgrid: false
         },
         yaxis: {
-            title: 'Nível do Rio (m)',
+            title: "Nível do Rio (m)",
             showgrid: false
         },
         legend: {
-            orientation: 'h',
+            orientation: "h",
             x: 0.5,
-            xanchor: 'center',
+            xanchor: "center",
             y: -0.15,
-            bgcolor: 'rgba(255,255,255,0.9)',
-            bordercolor: 'rgba(0,0,0,0.1)',
+            bgcolor: "rgba(255,255,255,0.9)",
+            bordercolor: "rgba(0,0,0,0.1)",
             borderwidth: 1
         },
         margin: { l: 60, r: 30, t: 80, b: 100 },
-        font: { family: 'Inter' },
-        width: 900,
+        font: { family: "Inter" },
+        width: 1100,
         height: 500
     };
     
@@ -386,17 +379,17 @@ function createDailyChart(data) {
         displayModeBar: false
     };
     
-    Plotly.newPlot('dailyChart', traces, layout, config);
+    Plotly.newPlot("dailyChart", traces, layout, config);
 }
 
 // Função para exportar dados (útil para desenvolvimento)
 function exportData() {
     const dataStr = JSON.stringify(allData, null, 2);
-    const dataBlob = new Blob([dataStr], {type: 'application/json'});
+    const dataBlob = new Blob([dataStr], {type: "application/json"});
     const url = URL.createObjectURL(dataBlob);
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
-    link.download = 'rio-negro-data.json';
+    link.download = "rio-negro-data.json";
     link.click();
 }
 

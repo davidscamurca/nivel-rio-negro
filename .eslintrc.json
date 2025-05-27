@@ -8,6 +8,9 @@
     "ecmaVersion": 12,
     "sourceType": "module"
   },
+  "globals": {
+    "Plotly": "readonly"
+  },
   "rules": {
     "no-unused-vars": "warn",
     "no-console": "off",

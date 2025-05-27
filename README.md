@@ -6,7 +6,7 @@ Um site estático moderno e interativo para visualizar dados históricos do nív
 
 ## 🚀 Características
 
-- **Gráficos Interativos**: Visualizações dinâmicas com Chart.js
+- **Gráficos Interativos**: Visualizações dinâmicas com Plotly.js
 - **Responsivo**: Funciona perfeitamente em desktop, tablet e mobile
 - **Filtros Avançados**: Filtre por ano, período ou use zoom nos gráficos
 - **Tooltips Informativos**: Passe o mouse sobre os gráficos para ver detalhes
@@ -129,13 +129,14 @@ Edite as variáveis CSS em `styles.css`:
 ```
 
 ### Configurações dos Gráficos
-Modifique as opções do Chart.js em `script.js`:
+Modifique as opções do Plotly.js em `script.js`:
 
 ```javascript
-// Exemplo: alterar altura dos gráficos
-.chart-wrapper {
-    height: 500px; /* Altere conforme necessário */
-}
+// Exemplo: alterar dimensões dos gráficos
+const layout = {
+    width: 1100,
+    height: 500 // Altere conforme necessário
+};
 ```
 
 ## 📱 Compatibilidade
@@ -164,7 +165,7 @@ Se você encontrar problemas ou tiver dúvidas:
 
 1. Verifique se seus dados estão no formato correto
 2. Abra o console do navegador (F12) para ver erros
-3. Consulte a documentação do Chart.js para customizações avançadas
+3. Consulte a documentação do Plotly.js para customizações avançadas
 
 ## 🔍 Funcionalidades Avançadas
 

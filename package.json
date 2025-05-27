@@ -1,6 +1,6 @@
 {
   "name": "nivel-rio-negro",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Monitoramento do Nível do Rio Negro - site estático",
   "scripts": {
     "lint": "eslint .",
