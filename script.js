@@ -248,7 +248,7 @@ function createYearlyChart(data) {
     const layout = {
         title: {
             text: 'Comparação de Níveis do Rio (2019-2025)',
-            font: { size: 20, family: 'Inter' }
+            font: { size: 18, family: 'Inter' }
         },
         xaxis: {
             title: 'Data (Dia-Mês)',
@@ -262,12 +262,18 @@ function createYearlyChart(data) {
             showgrid: false
         },
         legend: {
-            x: 0.02,
-            y: 0.98,
-            bgcolor: 'rgba(255,255,255,0.9)'
+            orientation: 'h',
+            x: 0.5,
+            xanchor: 'center',
+            y: -0.15,
+            bgcolor: 'rgba(255,255,255,0.9)',
+            bordercolor: 'rgba(0,0,0,0.1)',
+            borderwidth: 1
         },
-        margin: { l: 60, r: 30, t: 60, b: 60 },
+        margin: { l: 60, r: 30, t: 80, b: 100 },
         font: { family: 'Inter' },
+        width: 900,
+        height: 500,
         annotations: referenceDayMonth ? [{
             x: referenceDayMonth,
             y: 0.95,
@@ -350,7 +356,7 @@ function createDailyChart(data) {
     const layout = {
         title: {
             text: 'Nível do Rio e Médias Móveis',
-            font: { size: 20, family: 'Inter' }
+            font: { size: 18, family: 'Inter' }
         },
         xaxis: {
             title: 'Data',
@@ -361,12 +367,18 @@ function createDailyChart(data) {
             showgrid: false
         },
         legend: {
-            x: 0.02,
-            y: 0.98,
-            bgcolor: 'rgba(255,255,255,0.9)'
+            orientation: 'h',
+            x: 0.5,
+            xanchor: 'center',
+            y: -0.15,
+            bgcolor: 'rgba(255,255,255,0.9)',
+            bordercolor: 'rgba(0,0,0,0.1)',
+            borderwidth: 1
         },
-        margin: { l: 60, r: 30, t: 60, b: 60 },
-        font: { family: 'Inter' }
+        margin: { l: 60, r: 30, t: 80, b: 100 },
+        font: { family: 'Inter' },
+        width: 900,
+        height: 500
     };
     
     const config = {
