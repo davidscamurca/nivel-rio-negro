@@ -191,7 +191,7 @@ function createYearlyChart(data) {
                 y: yValues,
                 type: "scatter",
                 mode: "lines",
-                name: `COTA ${year}`,
+                name: `Nível ${year}`,
                 line: {
                     color: colors.yearly[year],
                     width: lineWidth
@@ -208,7 +208,7 @@ function createYearlyChart(data) {
             y: [0, 35], // Ajustar conforme o range dos seus dados
             type: "scatter",
             mode: "lines",
-            name: "Dia Atual",
+            name: "Hoje",
             line: {
                 color: "rgba(255, 0, 0, 0.8)",
                 width: 2,
@@ -242,7 +242,7 @@ function createYearlyChart(data) {
                             }
                         },
                         showlegend: false,
-                        hovertemplate: `<b>COTA ${year}</b><br>` +
+                        hovertemplate: `<b>Nível ${year}</b><br>` +
                                      `Data: ${referenceDayMonth}<br>` +
                                      `Nível: ${valueAtReference.toFixed(2)}m<br>` +
                                      "<extra></extra>"
@@ -253,10 +253,6 @@ function createYearlyChart(data) {
     }
     
     const layout = {
-        title: {
-            text: "Comparação de Níveis do Rio (2019-2025)",
-            font: { size: 18, family: "Inter" }
-        },
         xaxis: {
             title: "Data (Dia-Mês)",
             tickmode: "array",
@@ -272,12 +268,12 @@ function createYearlyChart(data) {
             orientation: "h",
             x: 0.5,
             xanchor: "center",
-            y: -0.15,
+            y: -0.2,
             bgcolor: "rgba(255,255,255,0.9)",
             bordercolor: "rgba(0,0,0,0.1)",
             borderwidth: 1
         },
-        margin: { l: 60, r: 30, t: 80, b: 100 },
+        margin: { l: 60, r: 30, t: 20, b: 120 },
         font: { family: "Inter" },
         width: 1100,
         height: 500,
@@ -286,7 +282,7 @@ function createYearlyChart(data) {
             y: 0.95,
             xref: "x",
             yref: "paper",
-            text: `Dia Atual: ${referenceDayMonth}`,
+            text: `Hoje: ${referenceDayMonth}`,
             showarrow: true,
             arrowhead: 2,
             arrowsize: 1,
@@ -339,7 +335,7 @@ function createDailyChart(data) {
             y: ma6m,
             type: "scatter",
             mode: "lines",
-            name: "MM 6M",
+            name: "Média 6 meses",
             line: { color: colors.daily.ma6m, width: 1, dash: "dash" }
         },
         {
@@ -347,7 +343,7 @@ function createDailyChart(data) {
             y: ma1y,
             type: "scatter",
             mode: "lines",
-            name: "MM 1A",
+            name: "Média 1 ano",
             line: { color: colors.daily.ma1y, width: 1.5, dash: "dashdot" }
         },
         {
@@ -355,16 +351,12 @@ function createDailyChart(data) {
             y: ma2y,
             type: "scatter",
             mode: "lines",
-            name: "MM 2A",
+            name: "Média 2 anos",
             line: { color: colors.daily.ma2y, width: 2, dash: "dot" }
         }
     ];
     
     const layout = {
-        title: {
-            text: "Nível do Rio e Médias Móveis",
-            font: { size: 18, family: "Inter" }
-        },
         xaxis: {
             title: "Data",
             showgrid: false
@@ -377,12 +369,12 @@ function createDailyChart(data) {
             orientation: "h",
             x: 0.5,
             xanchor: "center",
-            y: -0.15,
+            y: -0.2,
             bgcolor: "rgba(255,255,255,0.9)",
             bordercolor: "rgba(0,0,0,0.1)",
             borderwidth: 1
         },
-        margin: { l: 60, r: 30, t: 80, b: 100 },
+        margin: { l: 60, r: 30, t: 20, b: 120 },
         font: { family: "Inter" },
         width: 1100,
         height: 500

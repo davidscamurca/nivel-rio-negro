@@ -112,13 +112,8 @@ body {
 .title {
     font-size: var(--font-size-4xl);
     font-weight: 700;
-    margin-bottom: var(--spacing-2);
-}
-
-.subtitle {
-    font-size: var(--font-size-lg);
-    opacity: 0.9;
-    font-weight: 300;
+    margin-bottom: 0;
+    text-align: center;
 }
 
 /* Stats section */
@@ -328,19 +323,60 @@ body {
 .footer {
     background: var(--gray-800);
     color: var(--gray-300);
-    padding: var(--spacing-6) 0;
-    text-align: center;
-    margin-top: auto;
+    padding: var(--spacing-8) 0 var(--spacing-6) 0;
+    margin-top: var(--spacing-12);
 }
 
-.footer p {
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-6);
+    margin-bottom: var(--spacing-6);
+}
+
+.footer-section h3 {
+    color: var(--white);
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    margin-bottom: var(--spacing-3);
+    border-bottom: 2px solid var(--primary);
+    padding-bottom: var(--spacing-1);
+    display: inline-block;
+}
+
+.footer-section p {
     margin-bottom: var(--spacing-2);
+    font-size: var(--font-size-sm);
+    line-height: 1.5;
 }
 
-.footer p:last-child {
-    margin-bottom: 0;
+.footer-section a {
+    color: var(--accent);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.footer-section a:hover {
+    color: var(--white);
+    text-decoration: underline;
+}
+
+.footer-bottom {
+    border-top: 1px solid var(--gray-600);
+    padding-top: var(--spacing-4);
+    text-align: center;
+}
+
+.footer-bottom p {
+    margin-bottom: var(--spacing-1);
     font-size: var(--font-size-sm);
     opacity: 0.8;
+}
+
+.footer-bottom p:last-child {
+    margin-bottom: 0;
+    font-size: var(--font-size-xs);
+    opacity: 0.6;
 }
 
 /* Responsive design */
@@ -383,6 +419,11 @@ body {
     .info-grid {
         grid-template-columns: 1fr;
     }
+    
+    .footer-content {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-4);
+    }
 }
 
 @media (max-width: 480px) {
@@ -414,6 +455,15 @@ body {
     
     .chart-wrapper {
         height: 300px;
+    }
+    
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-3);
+    }
+    
+    .footer-section h3 {
+        font-size: var(--font-size-base);
     }
 }
 
