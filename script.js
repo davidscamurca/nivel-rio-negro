@@ -36,17 +36,57 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeApp();
 });
 
+function showLoading() {
+    const loadingDiv = document.createElement('div');
+    loadingDiv.className = 'loading-container';
+    loadingDiv.innerHTML = '<div class="loading-spinner"></div>';
+    document.querySelector('.main .container').prepend(loadingDiv);
+}
+
+function hideLoading() {
+    const loadingDiv = document.querySelector('.loading-container');
+    if (loadingDiv) {
+        loadingDiv.remove();
+    }
+}
+
+function showError(message) {
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'error-message';
+    errorDiv.textContent = message;
+    document.querySelector('.main .container').prepend(errorDiv);
+    
+    setTimeout(() => {
+        errorDiv.remove();
+    }, 5000);
+}
+
+function showSuccess(message) {
+    const successDiv = document.createElement('div');
+    successDiv.className = 'success-message';
+    successDiv.textContent = message;
+    document.querySelector('.main .container').prepend(successDiv);
+    
+    setTimeout(() => {
+        successDiv.remove();
+    }, 3000);
+}
+
 async function initializeApp() {
     try {
+        showLoading();
         await loadData();
         initializeCharts();
         setupEventListeners();
         updateStats();
         setupFilters();
+        showSuccess('Dados carregados com sucesso!');
         console.log('Aplicação inicializada com sucesso!');
     } catch (error) {
         console.error('Erro ao inicializar aplicação:', error);
         showError('Erro ao carregar os dados. Tente recarregar a página.');
+    } finally {
+        hideLoading();
     }
 }
 
@@ -688,34 +728,6 @@ function updateStats() {
 function resetZoom() {
     annualComparisonChart.resetZoom();
     trendsChart.resetZoom();
-}
-
-function showError(message) {
-    // Criar elemento de erro
-    const errorDiv = document.createElement('div');
-    errorDiv.className = 'error-message';
-    errorDiv.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: #ef4444;
-        color: white;
-        padding: 1rem;
-        border-radius: 0.5rem;
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        z-index: 1000;
-        max-width: 300px;
-    `;
-    errorDiv.textContent = message;
-    
-    document.body.appendChild(errorDiv);
-    
-    // Remover após 5 segundos
-    setTimeout(() => {
-        if (errorDiv.parentNode) {
-            errorDiv.parentNode.removeChild(errorDiv);
-        }
-    }, 5000);
 }
 
 // Função para exportar dados (útil para desenvolvimento)
