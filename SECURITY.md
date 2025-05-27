@@ -9,10 +9,16 @@ Este documento detalha as medidas de segurança implementadas no projeto para pr
 ## 🛡️ Medidas de Segurança Implementadas
 
 ### 1. Content Security Policy (CSP)
-**Implementação**: Meta tag no HTML
+**Implementação**: Meta tag no HTML (única opção no GitHub Pages)
 ```html
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none';">
 ```
+
+**⚠️ LIMITAÇÃO DO GITHUB PAGES**: 
+- ❌ GitHub Pages **NÃO suporta headers HTTP personalizados**
+- ✅ Meta tags `http-equiv` são a **única opção disponível**
+- ❌ Ferramentas como Security Headers mostram "vermelho" porque procuram headers HTTP
+- ✅ **A proteção funciona normalmente** nos navegadores modernos
 
 **Configuração Balanceada**: Este CSP é configurado para ser compatível com Plotly.js, que requer:
 - `'unsafe-inline'` para scripts: Plotly.js gera scripts dinâmicos
