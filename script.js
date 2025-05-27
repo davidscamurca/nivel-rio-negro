@@ -36,67 +36,26 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeApp();
 });
 
-function showLoading() {
-    const loadingDiv = document.createElement('div');
-    loadingDiv.className = 'loading-container';
-    loadingDiv.innerHTML = '<div class="loading-spinner"></div>';
-    document.querySelector('.main .container').prepend(loadingDiv);
-}
-
-function hideLoading() {
-    const loadingDiv = document.querySelector('.loading-container');
-    if (loadingDiv) {
-        loadingDiv.remove();
-    }
-}
-
-function showError(message) {
-    const errorDiv = document.createElement('div');
-    errorDiv.className = 'error-message';
-    errorDiv.textContent = message;
-    document.querySelector('.main .container').prepend(errorDiv);
+async function loadData() {
+    const response = await fetch('data/rio-negro-data.json');
+    const data = await response.json();
+    riverData = data;
+    filteredData = [...riverData];
     
-    setTimeout(() => {
-        errorDiv.remove();
-    }, 5000);
-}
-
-function showSuccess(message) {
-    const successDiv = document.createElement('div');
-    successDiv.className = 'success-message';
-    successDiv.textContent = message;
-    document.querySelector('.main .container').prepend(successDiv);
-    
-    setTimeout(() => {
-        successDiv.remove();
-    }, 3000);
+    console.log('Dados carregados:', {
+        total: riverData.length,
+        primeiro: riverData[0],
+        ultimo: riverData[riverData.length - 1]
+    });
 }
 
 async function initializeApp() {
-    try {
-        showLoading();
-        await loadData();
-        initializeCharts();
-        setupEventListeners();
-        updateStats();
-        setupFilters();
-        showSuccess('Dados carregados com sucesso!');
-        console.log('Aplicação inicializada com sucesso!');
-    } catch (error) {
-        console.error('Erro ao inicializar aplicação:', error);
-        showError('Erro ao carregar os dados. Tente recarregar a página.');
-    } finally {
-        hideLoading();
-    }
-}
-
-async function loadData() {
-    try {
-        await loadRealData('data/rio-negro-data.json');
-    } catch (error) {
-        console.error('Erro ao carregar dados:', error);
-        showError('Erro ao carregar os dados do arquivo JSON');
-    }
+    await loadData();
+    initializeCharts();
+    setupEventListeners();
+    updateStats();
+    setupFilters();
+    console.log('Aplicação inicializada com sucesso!');
 }
 
 function generateSampleData() {
@@ -739,33 +698,6 @@ function exportData() {
     link.href = url;
     link.download = 'rio-negro-data.json';
     link.click();
-}
-
-// Função para importar dados reais
-async function loadRealData(jsonFile) {
-    try {
-        const response = await fetch(jsonFile);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        riverData = data;
-        filteredData = [...riverData];
-        
-        console.log('Dados carregados:', {
-            total: riverData.length,
-            primeiro: riverData[0],
-            ultimo: riverData[riverData.length - 1]
-        });
-        
-        updateCharts();
-        updateStats();
-        setupFilters();
-    } catch (error) {
-        console.error('Erro ao carregar dados reais:', error);
-        showError('Erro ao carregar dados do arquivo JSON');
-        throw error;
-    }
 }
 
 // Disponibilizar funções globalmente para debug
