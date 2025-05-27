@@ -147,6 +147,13 @@ function updateStatistics(stats) {
     const variationColor = stats.variation7d > 0 ? "#10b981" : stats.variation7d < 0 ? "#ef4444" : "#6b7280";
     document.getElementById("variation-7d").style.color = variationColor;
     document.getElementById("variation-info").textContent = "últimos 7 dias";
+    
+    // Situação do rio
+    document.getElementById("river-status").textContent = stats.riverStatus;
+    const statusColor = stats.riverStatus === "Enchendo" ? "#10b981" : 
+                       stats.riverStatus === "Vazando" ? "#ef4444" : "#6b7280";
+    document.getElementById("river-status").style.color = statusColor;
+    document.getElementById("status-info").textContent = stats.statusInfo;
 }
 
 // Função para criar o gráfico anual com Plotly (MUITO mais simples!)

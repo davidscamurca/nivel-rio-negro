@@ -73,6 +73,33 @@ export function getStatistics(data) {
     variation7dInfo = `${sign}${variation7d.toFixed(2)}m`;
   }
 
+  // Situação do rio (Enchendo/Vazando/Parado)
+  let riverStatus = "Parado";
+  let statusInfo = "Sem variação significativa";
+  
+  if (dataLast7Days.length >= 3) {
+    // Calcular tendência dos últimos 3 dias
+    const last3Days = dataLast7Days.slice(-3);
+    const variations = [];
+    
+    for (let i = 1; i < last3Days.length; i++) {
+      variations.push(last3Days[i].level - last3Days[i-1].level);
+    }
+    
+    const avgVariation = variations.reduce((a, b) => a + b, 0) / variations.length;
+    
+    if (avgVariation > 0.02) { // Subindo mais de 2cm por dia em média
+      riverStatus = "Enchendo";
+      statusInfo = `+${(avgVariation * 100).toFixed(0)}cm/dia`;
+    } else if (avgVariation < -0.02) { // Descendo mais de 2cm por dia em média
+      riverStatus = "Vazando";
+      statusInfo = `${(avgVariation * 100).toFixed(0)}cm/dia`;
+    } else {
+      riverStatus = "Parado";
+      statusInfo = "Variação < 2cm/dia";
+    }
+  }
+
   return {
     current,
     currentDate,
@@ -81,7 +108,9 @@ export function getStatistics(data) {
     min: minRecord.level,
     minDate: minRecord.date,
     variation7d,
-    variation7dInfo
+    variation7dInfo,
+    riverStatus,
+    statusInfo
   };
 }
 
