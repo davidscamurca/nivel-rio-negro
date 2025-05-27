@@ -148,6 +148,19 @@ function createYearlyChart(data) {
     const currentYear = new Date().getFullYear();
     const traces = [];
     
+    // Encontrar o último dia disponível em 2025 (dia atual da série)
+    const data2025 = data.filter(d => d.date.getFullYear() === 2025);
+    let referenceDayMonth = null;
+    let referenceIndex = null;
+    
+    if (data2025.length > 0) {
+        const lastDate2025 = data2025[data2025.length - 1].date;
+        const monthAbbr = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        referenceDayMonth = `${String(lastDate2025.getDate()).padStart(2, '0')}-${monthAbbr[lastDate2025.getMonth()]}`;
+        referenceIndex = dayMonthLabels.indexOf(referenceDayMonth);
+        console.log(`Dia de referência: ${referenceDayMonth} (índice: ${referenceIndex})`);
+    }
+    
     // Processar dados para cada ano
     for (let year = 2019; year <= 2025; year++) {
         const yearData = data.filter(d => d.date.getFullYear() === year);
@@ -181,6 +194,57 @@ function createYearlyChart(data) {
         }
     }
     
+    // Adicionar linha vertical no dia de referência (se encontrado)
+    if (referenceDayMonth && referenceIndex !== -1) {
+        traces.push({
+            x: [referenceDayMonth, referenceDayMonth],
+            y: [0, 35], // Ajustar conforme o range dos seus dados
+            type: 'scatter',
+            mode: 'lines',
+            name: 'Dia Atual',
+            line: {
+                color: 'rgba(255, 0, 0, 0.8)',
+                width: 2,
+                dash: 'dash'
+            },
+            showlegend: true,
+            hoverinfo: 'skip'
+        });
+        
+        // Adicionar pontos destacados no dia de referência para cada ano
+        for (let year = 2019; year <= 2025; year++) {
+            const yearData = data.filter(d => d.date.getFullYear() === year);
+            if (yearData.length > 0) {
+                const dayMonthMap = deduplicateByDayMonth(yearData);
+                const valueAtReference = dayMonthMap.get(referenceDayMonth);
+                
+                if (valueAtReference !== undefined && valueAtReference !== null) {
+                    traces.push({
+                        x: [referenceDayMonth],
+                        y: [valueAtReference],
+                        type: 'scatter',
+                        mode: 'markers',
+                        name: `${year}: ${valueAtReference.toFixed(2)}m`,
+                        marker: {
+                            color: colors.yearly[year],
+                            size: 8,
+                            symbol: 'circle',
+                            line: {
+                                color: 'white',
+                                width: 2
+                            }
+                        },
+                        showlegend: false,
+                        hovertemplate: `<b>COTA ${year}</b><br>` +
+                                     `Data: ${referenceDayMonth}<br>` +
+                                     `Nível: ${valueAtReference.toFixed(2)}m<br>` +
+                                     '<extra></extra>'
+                    });
+                }
+            }
+        }
+    }
+    
     const layout = {
         title: {
             text: 'Comparação de Níveis do Rio (2019-2025)',
@@ -203,7 +267,28 @@ function createYearlyChart(data) {
             bgcolor: 'rgba(255,255,255,0.9)'
         },
         margin: { l: 60, r: 30, t: 60, b: 60 },
-        font: { family: 'Inter' }
+        font: { family: 'Inter' },
+        annotations: referenceDayMonth ? [{
+            x: referenceDayMonth,
+            y: 0.95,
+            xref: 'x',
+            yref: 'paper',
+            text: `Dia Atual: ${referenceDayMonth}`,
+            showarrow: true,
+            arrowhead: 2,
+            arrowsize: 1,
+            arrowwidth: 2,
+            arrowcolor: 'red',
+            ax: 0,
+            ay: -30,
+            font: {
+                color: 'red',
+                size: 12
+            },
+            bgcolor: 'rgba(255,255,255,0.9)',
+            bordercolor: 'red',
+            borderwidth: 1
+        }] : []
     };
     
     const config = {
