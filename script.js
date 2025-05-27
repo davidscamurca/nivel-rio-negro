@@ -315,8 +315,12 @@ function createDailyChart(data) {
     const ma1y = calculateMovingAverage(dataNoOutliers.map(d => d.level), 365); // ~1 ano
     const ma2y = calculateMovingAverage(dataNoOutliers.map(d => d.level), 730); // ~2 anos
 
-    // Preparar labels do eixo X com formatação correta
-    const xLabels = dataNoOutliers.map(d => d.date);
+    // Preparar labels do eixo X com formatação correta (strings de data)
+    const xLabels = dataNoOutliers.map(d => d.date.toLocaleDateString('pt-BR', { 
+        day: '2-digit', 
+        month: '2-digit', 
+        year: 'numeric' 
+    }));
 
     dailyChart = new Chart(ctx, {
         type: 'line',
@@ -402,8 +406,10 @@ function createDailyChart(data) {
                     cornerRadius: 8,
                     callbacks: {
                         title: function(context) {
-                            const date = context[0].parsed.x;
-                            return new Date(date).toLocaleDateString('pt-BR', {
+                            const dateStr = context[0].label;
+                            const [day, month, year] = dateStr.split('/');
+                            const date = new Date(year, month - 1, day);
+                            return date.toLocaleDateString('pt-BR', {
                                 year: 'numeric',
                                 month: 'long',
                                 day: 'numeric'
@@ -419,13 +425,7 @@ function createDailyChart(data) {
             },
             scales: {
                 x: {
-                    type: 'time',
-                    time: {
-                        unit: 'month',
-                        displayFormats: {
-                            month: 'MMM yy'
-                        }
-                    },
+                    type: 'category',
                     grid: {
                         display: false
                     },
@@ -434,7 +434,21 @@ function createDailyChart(data) {
                             size: 12
                         },
                         maxTicksLimit: 15,
-                        source: 'auto'
+                        callback: function(value, index) {
+                            // Mostrar apenas algumas datas para não sobrecarregar o eixo
+                            const totalLabels = this.chart.data.labels.length;
+                            const step = Math.ceil(totalLabels / 12); // Mostrar ~12 labels
+                            if (index % step === 0) {
+                                const dateStr = this.getLabelForValue(value);
+                                const [day, month, year] = dateStr.split('/');
+                                const date = new Date(year, month - 1, day);
+                                return date.toLocaleDateString('pt-BR', { 
+                                    month: 'short', 
+                                    year: '2-digit' 
+                                });
+                            }
+                            return '';
+                        }
                     }
                 },
                 y: {
