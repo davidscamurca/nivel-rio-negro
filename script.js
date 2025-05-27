@@ -260,15 +260,16 @@ function createYearlyChart(data) {
                         display: false
                     },
                     ticks: {
-                        maxTicksLimit: 12,
                         font: {
-                            size: 14
+                            size: 12
                         },
+                        maxTicksLimit: 12,
                         callback: function(value, index) {
                             const label = this.getLabelForValue(value);
                             const parts = label.split('-');
+                            // Mostrar apenas o primeiro dia de cada mês (01-Jan, 01-Feb, etc.)
                             if (parts[0] === '01') {
-                                return parts[1];
+                                return parts[1]; // Retorna apenas o mês (Jan, Feb, etc.)
                             }
                             return '';
                         }
@@ -280,7 +281,7 @@ function createYearlyChart(data) {
                     },
                     ticks: {
                         font: {
-                            size: 14
+                            size: 12
                         },
                         callback: function(value) {
                             return value.toFixed(1) + 'm';
@@ -314,10 +315,13 @@ function createDailyChart(data) {
     const ma1y = calculateMovingAverage(dataNoOutliers.map(d => d.level), 365); // ~1 ano
     const ma2y = calculateMovingAverage(dataNoOutliers.map(d => d.level), 730); // ~2 anos
 
+    // Preparar labels do eixo X com formatação correta
+    const xLabels = dataNoOutliers.map(d => d.date);
+
     dailyChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: dataNoOutliers.map(d => d.date.toLocaleDateString('pt-BR')),
+            labels: xLabels,
             datasets: [
                 {
                     label: 'Nível do Rio',
@@ -398,8 +402,8 @@ function createDailyChart(data) {
                     cornerRadius: 8,
                     callbacks: {
                         title: function(context) {
-                            const date = new Date(context[0].label);
-                            return date.toLocaleDateString('pt-BR', {
+                            const date = context[0].parsed.x;
+                            return new Date(date).toLocaleDateString('pt-BR', {
                                 year: 'numeric',
                                 month: 'long',
                                 day: 'numeric'
@@ -415,7 +419,13 @@ function createDailyChart(data) {
             },
             scales: {
                 x: {
-                    type: 'category',
+                    type: 'time',
+                    time: {
+                        unit: 'month',
+                        displayFormats: {
+                            month: 'MMM yy'
+                        }
+                    },
                     grid: {
                         display: false
                     },
@@ -423,15 +433,8 @@ function createDailyChart(data) {
                         font: {
                             size: 12
                         },
-                        maxTicksLimit: 20,
-                        callback: function(value, index) {
-                            const label = this.getLabelForValue(value);
-                            const date = new Date(label);
-                            if (index % Math.floor(this.chart.data.labels.length / 10) === 0) {
-                                return date.toLocaleDateString('pt-BR', { month: 'short', year: '2-digit' });
-                            }
-                            return '';
-                        }
+                        maxTicksLimit: 15,
+                        source: 'auto'
                     }
                 },
                 y: {
