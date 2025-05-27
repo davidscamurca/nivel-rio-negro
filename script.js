@@ -127,12 +127,26 @@ function updateUI() {
 
 // Função para atualizar as estatísticas
 function updateStatistics(stats) {
-    document.getElementById("current-level").textContent = stats.current.toFixed(2);
-    document.getElementById("trend").textContent = stats.trend.toFixed(2);
-    document.getElementById("max-level").textContent = stats.max.toFixed(2);
-    document.getElementById("min-level").textContent = stats.min.toFixed(2);
-    document.getElementById("total-readings").textContent = stats.total;
-    document.getElementById("avg-level").textContent = stats.average.toFixed(2);
+    // Nível atual
+    document.getElementById("current-level").textContent = `${stats.current.toFixed(2)}m`;
+    document.getElementById("current-date").textContent = stats.currentDate ? 
+        stats.currentDate.toLocaleDateString("pt-BR") : "--";
+    
+    // Máximo histórico
+    document.getElementById("max-level").textContent = `${stats.max.toFixed(2)}m`;
+    document.getElementById("max-date").textContent = stats.maxDate ? 
+        stats.maxDate.toLocaleDateString("pt-BR") : "--";
+    
+    // Mínimo histórico
+    document.getElementById("min-level").textContent = `${stats.min.toFixed(2)}m`;
+    document.getElementById("min-date").textContent = stats.minDate ? 
+        stats.minDate.toLocaleDateString("pt-BR") : "--";
+    
+    // Variação 7 dias
+    document.getElementById("variation-7d").textContent = stats.variation7dInfo;
+    const variationColor = stats.variation7d > 0 ? "#10b981" : stats.variation7d < 0 ? "#ef4444" : "#6b7280";
+    document.getElementById("variation-7d").style.color = variationColor;
+    document.getElementById("variation-info").textContent = "últimos 7 dias";
 }
 
 // Função para criar o gráfico anual com Plotly (MUITO mais simples!)

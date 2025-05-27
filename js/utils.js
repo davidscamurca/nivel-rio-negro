@@ -34,35 +34,54 @@ export function getStatistics(data) {
   if (!data || data.length === 0) {
     return {
       current: 0,
-      trend: 0,
+      currentDate: null,
       max: 0,
+      maxDate: null,
       min: 0,
-      total: 0,
-      average: 0
+      minDate: null,
+      variation7d: 0,
+      variation7dInfo: ""
     };
   }
 
   const sortedData = [...data].sort((a, b) => a.date - b.date);
-  const levels = sortedData.map(d => d.level);
   
-  // Nível atual e tendência
-  const current = levels[levels.length - 1];
-  const previous = levels[levels.length - 2] || current;
-  const trend = current - previous;
+  // Nível atual
+  const currentRecord = sortedData[sortedData.length - 1];
+  const current = currentRecord.level;
+  const currentDate = currentRecord.date;
 
-  // Estatísticas básicas
-  const max = Math.max(...levels);
-  const min = Math.min(...levels);
-  const total = levels.length;
-  const average = levels.reduce((a, b) => a + b, 0) / total;
+  // Máximo e mínimo com datas
+  const maxRecord = sortedData.reduce((max, item) => 
+    item.level > max.level ? item : max
+  );
+  const minRecord = sortedData.reduce((min, item) => 
+    item.level < min.level ? item : min
+  );
+
+  // Variação dos últimos 7 dias
+  const sevenDaysAgo = new Date(currentDate.getTime() - 7 * 24 * 60 * 60 * 1000);
+  const dataLast7Days = sortedData.filter(d => d.date >= sevenDaysAgo);
+  
+  let variation7d = 0;
+  let variation7dInfo = "Sem dados suficientes";
+  
+  if (dataLast7Days.length >= 2) {
+    const oldestIn7Days = dataLast7Days[0];
+    variation7d = current - oldestIn7Days.level;
+    const sign = variation7d >= 0 ? "+" : "";
+    variation7dInfo = `${sign}${variation7d.toFixed(2)}m`;
+  }
 
   return {
     current,
-    trend,
-    max,
-    min,
-    total,
-    average
+    currentDate,
+    max: maxRecord.level,
+    maxDate: maxRecord.date,
+    min: minRecord.level,
+    minDate: minRecord.date,
+    variation7d,
+    variation7dInfo
   };
 }
 
