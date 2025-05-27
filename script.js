@@ -89,7 +89,7 @@ async function initializeApp() {
 async function loadData() {
     console.log("Carregando dados...");
     try {
-        const response = await fetch("/data/rio-negro-data.json");
+        const response = await fetch("./data/rio-negro-data.json");
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
