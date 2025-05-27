@@ -1,3 +1,6 @@
+// Importando funções utilitárias
+import { formatDate, parseDate, calculateMovingAverage, filterDataByYear, filterDataByPeriod, getStatistics } from "./js/utils.js";
+
 // Configuração global do Chart.js
 Chart.defaults.font.family = 'Inter, sans-serif';
 Chart.defaults.color = '#374151';
@@ -35,21 +38,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
 async function initializeApp() {
     try {
-        // Carregar dados (primeiro com dados de exemplo, depois você pode substituir)
         await loadData();
-        
-        // Inicializar gráficos
         initializeCharts();
-        
-        // Configurar event listeners
         setupEventListeners();
-        
-        // Atualizar estatísticas
         updateStats();
-        
-        // Configurar filtros
         setupFilters();
-        
         console.log('Aplicação inicializada com sucesso!');
     } catch (error) {
         console.error('Erro ao inicializar aplicação:', error);
@@ -58,14 +51,11 @@ async function initializeApp() {
 }
 
 async function loadData() {
-    // Carregar dados reais do arquivo JSON
     try {
         await loadRealData('data/rio-negro-data.json');
     } catch (error) {
-        console.warn('Erro ao carregar dados reais, usando dados de exemplo:', error);
-        // Fallback para dados de exemplo se não conseguir carregar os reais
-        riverData = generateSampleData();
-        filteredData = [...riverData];
+        console.error('Erro ao carregar dados:', error);
+        showError('Erro ao carregar os dados do arquivo JSON');
     }
 }
 
@@ -114,8 +104,6 @@ function initializeCharts() {
     createAnnualComparisonChart();
     createTrendsChart();
 }
-
-
 
 function createAnnualComparisonChart() {
     const ctx = document.getElementById('annual-comparison-chart').getContext('2d');
@@ -489,25 +477,6 @@ function calculateMovingAverages() {
     };
 }
 
-function calculateMovingAverage(data, window) {
-    const result = [];
-    for (let i = 0; i < data.length; i++) {
-        if (i < window - 1) {
-            result.push(null);
-        } else {
-            const slice = data.slice(i - window + 1, i + 1);
-            const validValues = slice.filter(v => v !== null && v !== undefined && !isNaN(v));
-            if (validValues.length > 0) {
-                const sum = validValues.reduce((a, b) => a + b, 0);
-                result.push(sum / validValues.length);
-            } else {
-                result.push(null);
-            }
-        }
-    }
-    return result;
-}
-
 function setupEventListeners() {
     // Filtro por ano
     document.getElementById('year-filter').addEventListener('change', function() {
@@ -764,6 +733,9 @@ function exportData() {
 async function loadRealData(jsonFile) {
     try {
         const response = await fetch(jsonFile);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const data = await response.json();
         riverData = data;
         filteredData = [...riverData];
@@ -780,6 +752,7 @@ async function loadRealData(jsonFile) {
     } catch (error) {
         console.error('Erro ao carregar dados reais:', error);
         showError('Erro ao carregar dados do arquivo JSON');
+        throw error;
     }
 }
 
