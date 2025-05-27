@@ -256,30 +256,33 @@ function createYearlyChart(data) {
             },
             scales: {
                 x: {
+                    display: true,
                     grid: {
                         display: false
                     },
                     ticks: {
+                        display: true,
                         font: {
                             size: 12
                         },
                         maxTicksLimit: 12,
+                        autoSkip: true,
                         callback: function(value, index) {
-                            const label = this.getLabelForValue(value);
-                            const parts = label.split('-');
-                            // Mostrar apenas o primeiro dia de cada mês (01-Jan, 01-Feb, etc.)
-                            if (parts[0] === '01') {
-                                return parts[1]; // Retorna apenas o mês (Jan, Feb, etc.)
+                            const label = dayMonthLabels[index];
+                            if (label && label.startsWith('01-')) {
+                                return label.split('-')[1]; // Retorna apenas o mês
                             }
                             return '';
                         }
                     }
                 },
                 y: {
+                    display: true,
                     grid: {
                         display: false
                     },
                     ticks: {
+                        display: true,
                         font: {
                             size: 12
                         },
@@ -315,12 +318,17 @@ function createDailyChart(data) {
     const ma1y = calculateMovingAverage(dataNoOutliers.map(d => d.level), 365); // ~1 ano
     const ma2y = calculateMovingAverage(dataNoOutliers.map(d => d.level), 730); // ~2 anos
 
-    // Preparar labels do eixo X com formatação correta (strings de data)
-    const xLabels = dataNoOutliers.map(d => d.date.toLocaleDateString('pt-BR', { 
-        day: '2-digit', 
-        month: '2-digit', 
-        year: 'numeric' 
-    }));
+    // Criar labels simples para o eixo X
+    const xLabels = dataNoOutliers.map((d, index) => {
+        if (index % 365 === 0) { // A cada ano aproximadamente
+            return d.date.getFullYear().toString();
+        } else if (index % 30 === 0) { // A cada mês aproximadamente
+            const monthNames = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 
+                              'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+            return monthNames[d.date.getMonth()];
+        }
+        return '';
+    });
 
     dailyChart = new Chart(ctx, {
         type: 'line',
@@ -406,9 +414,8 @@ function createDailyChart(data) {
                     cornerRadius: 8,
                     callbacks: {
                         title: function(context) {
-                            const dateStr = context[0].label;
-                            const [day, month, year] = dateStr.split('/');
-                            const date = new Date(year, month - 1, day);
+                            const index = context[0].dataIndex;
+                            const date = dataNoOutliers[index].date;
                             return date.toLocaleDateString('pt-BR', {
                                 year: 'numeric',
                                 month: 'long',
@@ -425,37 +432,27 @@ function createDailyChart(data) {
             },
             scales: {
                 x: {
+                    display: true,
                     type: 'category',
                     grid: {
                         display: false
                     },
                     ticks: {
+                        display: true,
                         font: {
                             size: 12
                         },
-                        maxTicksLimit: 15,
-                        callback: function(value, index) {
-                            // Mostrar apenas algumas datas para não sobrecarregar o eixo
-                            const totalLabels = this.chart.data.labels.length;
-                            const step = Math.ceil(totalLabels / 12); // Mostrar ~12 labels
-                            if (index % step === 0) {
-                                const dateStr = this.getLabelForValue(value);
-                                const [day, month, year] = dateStr.split('/');
-                                const date = new Date(year, month - 1, day);
-                                return date.toLocaleDateString('pt-BR', { 
-                                    month: 'short', 
-                                    year: '2-digit' 
-                                });
-                            }
-                            return '';
-                        }
+                        maxTicksLimit: 20,
+                        autoSkip: false
                     }
                 },
                 y: {
+                    display: true,
                     grid: {
                         display: false
                     },
                     ticks: {
+                        display: true,
                         font: {
                             size: 12
                         },
