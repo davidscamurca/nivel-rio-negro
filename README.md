@@ -1,5 +1,7 @@
 # 🌊 Monitoramento do Nível do Rio Negro
 
+[![Deploy to GitHub Pages](https://github.com/davidscamurca/nivel-rio-negro/actions/workflows/deploy.yml/badge.svg)](https://github.com/davidscamurca/nivel-rio-negro/actions/workflows/deploy.yml)
+
 Um site estático moderno e interativo para visualizar dados históricos do nível do Rio Negro desde 2000.
 
 ## 🚀 Características
