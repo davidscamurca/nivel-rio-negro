@@ -8,7 +8,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self';">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <script src="plotly-latest.min.js"></script>
 </head>
 <body>
     <header class="header">
@@ -79,7 +83,7 @@
                 </div>
                 <div class="footer-section">
                     <h3>Dados</h3>
-                    <p>Fonte: <a href="https://portodemanaus.com.br/nivel-do-rio-negro/" target="_blank" rel="noopener">Porto de Manaus</a></p>
+                    <p>Fonte: <a href="https://portodemanaus.com.br/nivel-do-rio-negro/" target="_blank" rel="noopener noreferrer">Porto de Manaus</a></p>
                     <p>Atualização: Dados disponíveis até maio de 2025</p>
                     <p>Período: 2000 - 2025</p>
                 </div>
@@ -91,9 +95,9 @@
                 </div>
                 <div class="footer-section">
                     <h3>Links</h3>
-                    <p><a href="https://github.com/davidscamurca/nivel-rio-negro" target="_blank" rel="noopener">📂 Código no GitHub</a></p>
-                    <p><a href="https://github.com/davidscamurca/nivel-rio-negro/issues" target="_blank" rel="noopener">🐛 Reportar Problema</a></p>
-                    <p><a href="https://github.com/davidscamurca/nivel-rio-negro/blob/main/README.md" target="_blank" rel="noopener">📖 Documentação</a></p>
+                    <p><a href="https://github.com/davidscamurca/nivel-rio-negro" target="_blank" rel="noopener noreferrer">📂 Código no GitHub</a></p>
+                    <p><a href="https://github.com/davidscamurca/nivel-rio-negro/issues" target="_blank" rel="noopener noreferrer">🐛 Reportar Problema</a></p>
+                    <p><a href="https://github.com/davidscamurca/nivel-rio-negro/blob/main/README.md" target="_blank" rel="noopener noreferrer">📖 Documentação</a></p>
                 </div>
             </div>
             <div class="footer-bottom">
