@@ -269,7 +269,8 @@ function createYearlyChart(data) {
         },
         yaxis: {
             title: "Nível do Rio (m)",
-            showgrid: false
+            showgrid: false,
+            range: [10, null]
         },
         legend: {
             orientation: "h",
