@@ -11,18 +11,8 @@ import {
     calculatePercentiles
 } from './js/utils.js';
 
-// Configuração global do Chart.js
-Chart.defaults.font.family = 'Inter, sans-serif';
-Chart.defaults.font.size = 12;
-Chart.defaults.color = '#6c757d';
-Chart.defaults.plugins.tooltip.backgroundColor = 'rgba(0, 0, 0, 0.8)';
-Chart.defaults.plugins.tooltip.padding = 10;
-Chart.defaults.plugins.tooltip.cornerRadius = 4;
-
 // Variáveis globais
 let allData = [];
-let dailyChart = null;
-let yearlyChart = null;
 
 // Cores para os gráficos (exatamente como no Python)
 const colors = {
@@ -152,323 +142,154 @@ function updateStatistics(stats) {
     document.getElementById('avg-level').textContent = stats.average.toFixed(2);
 }
 
-// Função para criar o gráfico anual (exatamente como no Python)
+// Função para criar o gráfico anual com Plotly (MUITO mais simples!)
 function createYearlyChart(data) {
-    const ctx = document.getElementById('yearlyChart').getContext('2d');
-    
-    if (yearlyChart) {
-        yearlyChart.destroy();
-    }
-
-    // Preparar dados por ano (igual ao Python)
-    const yearlyData = {};
-    const currentYear = new Date().getFullYear();
     const dayMonthLabels = generateDayMonthLabels();
+    const currentYear = new Date().getFullYear();
+    const traces = [];
     
-    // Processar dados para cada ano individualmente
+    // Processar dados para cada ano
     for (let year = 2019; year <= 2025; year++) {
         const yearData = data.filter(d => d.date.getFullYear() === year);
         if (yearData.length > 0) {
-            // Deduplica por dia-mês (mantém o último registro)
+            // Deduplica por dia-mês
             const dayMonthMap = deduplicateByDayMonth(yearData);
+            const yValues = dayMonthLabels.map(label => dayMonthMap.get(label) || null);
             
-            // Criar array ordenado para o ano
-            yearlyData[year] = dayMonthLabels.map(label => dayMonthMap.get(label) || null);
-        }
-    }
-
-    const datasets = [];
-    Object.keys(yearlyData).sort().forEach(year => {
-        const yearData = yearlyData[year];
-        if (yearData && yearData.length > 0) {
-            // Estilos diferenciados (igual ao Python)
-            let lineWidth, alpha;
+            // Estilo da linha baseado no ano
+            let lineWidth;
             if (year == currentYear) {
-                lineWidth = 3.0;
-                alpha = 1.0;
+                lineWidth = 3;
             } else if (year >= currentYear - 3) {
                 lineWidth = 2.5;
-                alpha = 0.8;
             } else {
                 lineWidth = 1.5;
-                alpha = 0.6;
             }
             
-            datasets.push({
-                label: `COTA ${year}`,
-                data: yearData,
-                borderColor: colors.yearly[year] || '#666666',
-                backgroundColor: 'transparent',
-                borderWidth: lineWidth,
-                fill: false,
-                tension: 0.4,
-                pointRadius: 0,
-                pointHoverRadius: 6,
-                pointHoverBackgroundColor: colors.yearly[year],
-                pointHoverBorderColor: '#ffffff',
-                pointHoverBorderWidth: 2
+            traces.push({
+                x: dayMonthLabels,
+                y: yValues,
+                type: 'scatter',
+                mode: 'lines',
+                name: `COTA ${year}`,
+                line: {
+                    color: colors.yearly[year],
+                    width: lineWidth
+                },
+                connectgaps: false
             });
         }
-    });
-
-    yearlyChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: dayMonthLabels,
-            datasets: datasets
+    }
+    
+    const layout = {
+        title: {
+            text: 'Comparação de Níveis do Rio (2019-2025)',
+            font: { size: 20, family: 'Inter' }
         },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            interaction: {
-                intersect: false,
-                mode: 'index'
-            },
-            plugins: {
-                legend: {
-                    display: true,
-                    position: 'top',
-                    align: 'start',
-                    labels: {
-                        usePointStyle: false,
-                        padding: 15,
-                        font: {
-                            size: 12
-                        }
-                    }
-                },
-                tooltip: {
-                    backgroundColor: '#1f2937',
-                    titleColor: '#ffffff',
-                    bodyColor: '#ffffff',
-                    cornerRadius: 8,
-                    callbacks: {
-                        title: function(context) {
-                            return `Dia ${context[0].label}`;
-                        },
-                        label: function(context) {
-                            const value = context.parsed.y;
-                            if (value === null || value === undefined) return null;
-                            return `${context.dataset.label}: ${value.toFixed(2)}m`;
-                        }
-                    }
-                }
-            },
-            scales: {
-                x: {
-                    display: true,
-                    grid: {
-                        display: false
-                    },
-                    ticks: {
-                        display: true,
-                        font: {
-                            size: 12
-                        },
-                        maxTicksLimit: 12,
-                        autoSkip: true,
-                        callback: function(value, index) {
-                            const label = dayMonthLabels[index];
-                            if (label && label.startsWith('01-')) {
-                                return label.split('-')[1]; // Retorna apenas o mês
-                            }
-                            return '';
-                        }
-                    }
-                },
-                y: {
-                    display: true,
-                    grid: {
-                        display: false
-                    },
-                    ticks: {
-                        display: true,
-                        font: {
-                            size: 12
-                        },
-                        callback: function(value) {
-                            return value.toFixed(1) + 'm';
-                        }
-                    }
-                }
-            },
-            elements: {
-                point: {
-                    hoverRadius: 8
-                }
-            }
-        }
-    });
+        xaxis: {
+            title: 'Data (Dia-Mês)',
+            tickmode: 'array',
+            tickvals: dayMonthLabels.filter((label, index) => label.startsWith('01-')),
+            ticktext: dayMonthLabels.filter((label, index) => label.startsWith('01-')).map(label => label.split('-')[1]),
+            showgrid: false
+        },
+        yaxis: {
+            title: 'Nível do Rio (m)',
+            showgrid: false
+        },
+        legend: {
+            x: 0.02,
+            y: 0.98,
+            bgcolor: 'rgba(255,255,255,0.9)'
+        },
+        margin: { l: 60, r: 30, t: 60, b: 60 },
+        font: { family: 'Inter' }
+    };
+    
+    const config = {
+        responsive: true,
+        displayModeBar: false
+    };
+    
+    Plotly.newPlot('yearlyChart', traces, layout, config);
 }
 
-// Função para criar o gráfico de médias móveis (exatamente como no Python)
+// Função para criar o gráfico de médias móveis com Plotly (MUITO mais simples!)
 function createDailyChart(data) {
-    const ctx = document.getElementById('dailyChart').getContext('2d');
-    
-    if (dailyChart) {
-        dailyChart.destroy();
-    }
-
-    // Remover outliers (igual ao Python)
+    // Remover outliers
     const dataNoOutliers = removeOutliersIQR(data);
     console.log(`Dados após remoção de outliers: ${dataNoOutliers.length} de ${data.length} registros`);
-
-    // Calcular médias móveis (janelas iguais ao Python)
-    const ma6m = calculateMovingAverage(dataNoOutliers.map(d => d.level), 182); // ~6 meses
-    const ma1y = calculateMovingAverage(dataNoOutliers.map(d => d.level), 365); // ~1 ano
-    const ma2y = calculateMovingAverage(dataNoOutliers.map(d => d.level), 730); // ~2 anos
-
-    // Criar labels simples para o eixo X
-    const xLabels = dataNoOutliers.map((d, index) => {
-        if (index % 365 === 0) { // A cada ano aproximadamente
-            return d.date.getFullYear().toString();
-        } else if (index % 30 === 0) { // A cada mês aproximadamente
-            const monthNames = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 
-                              'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
-            return monthNames[d.date.getMonth()];
-        }
-        return '';
-    });
-
-    dailyChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: xLabels,
-            datasets: [
-                {
-                    label: 'Nível do Rio',
-                    data: dataNoOutliers.map(d => d.level),
-                    borderColor: colors.daily.level,
-                    backgroundColor: 'transparent',
-                    borderWidth: 1.5,
-                    fill: false,
-                    tension: 0.4,
-                    pointRadius: 0,
-                    pointHoverRadius: 6,
-                    pointHoverBackgroundColor: colors.daily.level,
-                    pointHoverBorderColor: '#ffffff',
-                    pointHoverBorderWidth: 2
-                },
-                {
-                    label: 'MM 6M',
-                    data: ma6m,
-                    borderColor: colors.daily.ma6m,
-                    backgroundColor: 'transparent',
-                    borderWidth: 1.0,
-                    borderDash: [5, 5],
-                    fill: false,
-                    tension: 0.4,
-                    pointRadius: 0,
-                    pointHoverRadius: 4
-                },
-                {
-                    label: 'MM 1A',
-                    data: ma1y,
-                    borderColor: colors.daily.ma1y,
-                    backgroundColor: 'transparent',
-                    borderWidth: 1.5,
-                    borderDash: [10, 5],
-                    fill: false,
-                    tension: 0.4,
-                    pointRadius: 0,
-                    pointHoverRadius: 4
-                },
-                {
-                    label: 'MM 2A',
-                    data: ma2y,
-                    borderColor: colors.daily.ma2y,
-                    backgroundColor: 'transparent',
-                    borderWidth: 2.0,
-                    borderDash: [2, 2],
-                    fill: false,
-                    tension: 0.4,
-                    pointRadius: 0,
-                    pointHoverRadius: 4
-                }
-            ]
+    
+    // Calcular médias móveis
+    const ma6m = calculateMovingAverage(dataNoOutliers.map(d => d.level), 182);
+    const ma1y = calculateMovingAverage(dataNoOutliers.map(d => d.level), 365);
+    const ma2y = calculateMovingAverage(dataNoOutliers.map(d => d.level), 730);
+    
+    const dates = dataNoOutliers.map(d => d.date);
+    
+    const traces = [
+        {
+            x: dates,
+            y: dataNoOutliers.map(d => d.level),
+            type: 'scatter',
+            mode: 'lines',
+            name: 'Nível do Rio',
+            line: { color: colors.daily.level, width: 1.5 }
         },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            interaction: {
-                intersect: false,
-                mode: 'index'
-            },
-            plugins: {
-                legend: {
-                    display: true,
-                    position: 'top',
-                    align: 'start',
-                    labels: {
-                        usePointStyle: false,
-                        padding: 20,
-                        font: {
-                            size: 12
-                        }
-                    }
-                },
-                tooltip: {
-                    backgroundColor: '#1f2937',
-                    titleColor: '#ffffff',
-                    bodyColor: '#ffffff',
-                    cornerRadius: 8,
-                    callbacks: {
-                        title: function(context) {
-                            const index = context[0].dataIndex;
-                            const date = dataNoOutliers[index].date;
-                            return date.toLocaleDateString('pt-BR', {
-                                year: 'numeric',
-                                month: 'long',
-                                day: 'numeric'
-                            });
-                        },
-                        label: function(context) {
-                            const value = context.parsed.y;
-                            if (value === null || value === undefined) return null;
-                            return `${context.dataset.label}: ${value.toFixed(1)}m`;
-                        }
-                    }
-                }
-            },
-            scales: {
-                x: {
-                    display: true,
-                    type: 'category',
-                    grid: {
-                        display: false
-                    },
-                    ticks: {
-                        display: true,
-                        font: {
-                            size: 12
-                        },
-                        maxTicksLimit: 20,
-                        autoSkip: false
-                    }
-                },
-                y: {
-                    display: true,
-                    grid: {
-                        display: false
-                    },
-                    ticks: {
-                        display: true,
-                        font: {
-                            size: 12
-                        },
-                        callback: function(value) {
-                            return value.toFixed(1) + 'm';
-                        }
-                    }
-                }
-            },
-            elements: {
-                point: {
-                    hoverRadius: 8
-                }
-            }
+        {
+            x: dates,
+            y: ma6m,
+            type: 'scatter',
+            mode: 'lines',
+            name: 'MM 6M',
+            line: { color: colors.daily.ma6m, width: 1, dash: 'dash' }
+        },
+        {
+            x: dates,
+            y: ma1y,
+            type: 'scatter',
+            mode: 'lines',
+            name: 'MM 1A',
+            line: { color: colors.daily.ma1y, width: 1.5, dash: 'dashdot' }
+        },
+        {
+            x: dates,
+            y: ma2y,
+            type: 'scatter',
+            mode: 'lines',
+            name: 'MM 2A',
+            line: { color: colors.daily.ma2y, width: 2, dash: 'dot' }
         }
-    });
+    ];
+    
+    const layout = {
+        title: {
+            text: 'Nível do Rio e Médias Móveis',
+            font: { size: 20, family: 'Inter' }
+        },
+        xaxis: {
+            title: 'Data',
+            showgrid: false
+        },
+        yaxis: {
+            title: 'Nível do Rio (m)',
+            showgrid: false
+        },
+        legend: {
+            x: 0.02,
+            y: 0.98,
+            bgcolor: 'rgba(255,255,255,0.9)'
+        },
+        margin: { l: 60, r: 30, t: 60, b: 60 },
+        font: { family: 'Inter' }
+    };
+    
+    const config = {
+        responsive: true,
+        displayModeBar: false
+    };
+    
+    Plotly.newPlot('dailyChart', traces, layout, config);
 }
 
 // Função para exportar dados (útil para desenvolvimento)

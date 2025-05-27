@@ -3,143 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nível do Rio Negro - Monitoramento Histórico</title>
+    <title>Monitoramento do Rio Negro</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/date-fns@2.29.3/index.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
     <header class="header">
         <div class="container">
-            <h1 class="title">
-                <span class="icon">🌊</span>
-                Nível do Rio Negro
-            </h1>
-            <p class="subtitle">Monitoramento histórico desde 2000</p>
+            <h1 class="title">Monitoramento do Rio Negro</h1>
+            <p class="subtitle">Acompanhe o nível do rio em tempo real</p>
         </div>
     </header>
 
     <main class="main">
         <div class="container">
-            <!-- Estatísticas Resumo -->
             <section class="stats-section">
                 <div class="stats-grid">
                     <div class="stat-card">
-                        <div class="stat-icon">📊</div>
-                        <div class="stat-content">
-                            <h3 class="stat-value" id="current-level">--</h3>
-                            <p class="stat-label">Nível Atual</p>
-                        </div>
+                        <div class="stat-value" id="current-level">--</div>
+                        <div class="stat-label">Nível Atual (m)</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon">📈</div>
-                        <div class="stat-content">
-                            <h3 class="stat-value" id="variation">--</h3>
-                            <p class="stat-label">Tendência</p>
-                        </div>
+                        <div class="stat-value" id="trend">--</div>
+                        <div class="stat-label">Tendência (m/dia)</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon">🏆</div>
-                        <div class="stat-content">
-                            <h3 class="stat-value" id="max-level">--</h3>
-                            <p class="stat-label">Máximo Histórico</p>
-                        </div>
+                        <div class="stat-value" id="max-level">--</div>
+                        <div class="stat-label">Máximo (m)</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon">📉</div>
-                        <div class="stat-content">
-                            <h3 class="stat-value" id="min-level">--</h3>
-                            <p class="stat-label">Mínimo Histórico</p>
-                        </div>
+                        <div class="stat-value" id="min-level">--</div>
+                        <div class="stat-label">Mínimo (m)</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon">📅</div>
-                        <div class="stat-content">
-                            <h3 class="stat-value" id="total-records">--</h3>
-                            <p class="stat-label">Total de Registros</p>
-                        </div>
+                        <div class="stat-value" id="total-readings">--</div>
+                        <div class="stat-label">Total de Leituras</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon">📊</div>
-                        <div class="stat-content">
-                            <h3 class="stat-value" id="average-level">--</h3>
-                            <p class="stat-label">Nível Médio</p>
-                        </div>
+                        <div class="stat-value" id="avg-level">--</div>
+                        <div class="stat-label">Nível Médio (m)</div>
                     </div>
                 </div>
             </section>
 
-            <!-- Controles de Filtro -->
-            <section class="controls-section">
-                <div class="controls">
-                    <div class="control-group">
-                        <label for="year-filter">Filtrar por Ano:</label>
-                        <select id="year-filter">
-                            <option value="all">Todos os Anos</option>
-                        </select>
-                    </div>
-                    <div class="control-group">
-                        <label for="period-filter">Período:</label>
-                        <select id="period-filter">
-                            <option value="all">Todo o Período</option>
-                            <option value="last-year">Último Ano</option>
-                            <option value="last-6-months">Últimos 6 Meses</option>
-                            <option value="last-3-months">Últimos 3 Meses</option>
-                            <option value="last-month">Último Mês</option>
-                        </select>
-                    </div>
-                    <button id="reset-zoom" class="btn-secondary">Resetar Zoom</button>
-                </div>
-            </section>
-
-            <!-- Gráfico de Comparação Anual -->
             <section class="chart-section">
                 <div class="chart-container">
-                    <h2 class="chart-title">Comparação de Níveis por Ano (2019-2025)</h2>
+                    <h2 class="chart-title">Comparação de Níveis do Rio (2019-2025)</h2>
                     <div class="chart-wrapper">
-                        <canvas id="annual-comparison-chart"></canvas>
+                        <div id="yearlyChart" style="width:100%;height:400px;"></div>
                     </div>
                 </div>
             </section>
 
-            <!-- Gráfico de Tendências e Médias Móveis -->
             <section class="chart-section">
                 <div class="chart-container">
                     <h2 class="chart-title">Nível do Rio e Médias Móveis</h2>
                     <div class="chart-wrapper">
-                        <canvas id="trends-chart"></canvas>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Informações Adicionais -->
-            <section class="info-section">
-                <div class="info-grid">
-                    <div class="info-card">
-                        <h3>Sobre o Monitoramento</h3>
-                        <p>Este sistema monitora o nível do Rio Negro desde o ano 2000, coletando dados diários sobre o nível da água e suas variações. Os dados são fundamentais para o planejamento urbano e gestão de recursos hídricos da região.</p>
-                    </div>
-                    <div class="info-card">
-                        <h3>Como Interpretar</h3>
-                        <ul>
-                            <li><strong>Nível do Rio:</strong> Medido em metros acima do nível de referência</li>
-                            <li><strong>Variação:</strong> Diferença em centímetros em relação ao dia anterior</li>
-                            <li><strong>Valores Positivos:</strong> Rio subindo (enchendo)</li>
-                            <li><strong>Valores Negativos:</strong> Rio descendo (vazando)</li>
-                        </ul>
+                        <div id="dailyChart" style="width:100%;height:400px;"></div>
                     </div>
                 </div>
             </section>
         </div>
     </main>
-
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2024 Monitoramento Rio Negro. Dados históricos desde 2000.</p>
-            <p>Última atualização: <span id="last-update">--</span></p>
-        </div>
-    </footer>
 
     <script type="module" src="script.js"></script>
 </body>
