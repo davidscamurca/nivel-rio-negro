@@ -1,0 +1,13 @@
+{
+  "name": "nivel-rio-negro",
+  "version": "1.0.0",
+  "description": "Monitoramento do Nível do Rio Negro - site estático",
+  "scripts": {
+    "lint": "eslint .",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "eslint": "^8.0.0",
+    "prettier": "^3.0.0"
+  }
+} 
