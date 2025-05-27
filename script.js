@@ -212,7 +212,7 @@ function createYearlyChart(data) {
     if (referenceDayMonth && referenceIndex !== -1) {
         traces.push({
             x: [referenceDayMonth, referenceDayMonth],
-            y: [0, 35], // Ajustar conforme o range dos seus dados
+            y: [15, 35], // Ajustado para não forçar o eixo Y a incluir 0
             type: "scatter",
             mode: "lines",
             name: "Hoje",
@@ -270,7 +270,7 @@ function createYearlyChart(data) {
         yaxis: {
             title: "Nível do Rio (m)",
             showgrid: false,
-            range: [10, null]
+            range: [15, null]
         },
         legend: {
             orientation: "h",
