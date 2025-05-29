@@ -45806,13 +45806,13 @@
   },
   {
     "data": "2025-01-30",
-    "nivel_rio": 22.17,
-    "encheu_vazou": 4.0
+    "nivel_rio": 22.2,
+    "encheu_vazou": 3.0
   },
   {
     "data": "2025-01-30",
-    "nivel_rio": 22.2,
-    "encheu_vazou": 3.0
+    "nivel_rio": 22.17,
+    "encheu_vazou": 4.0
   },
   {
     "data": "2025-02-01",
@@ -46373,5 +46373,35 @@
     "data": "2025-05-23",
     "nivel_rio": 28.42,
     "encheu_vazou": 2.0
+  },
+  {
+    "data": "2025-05-24",
+    "nivel_rio": 28.45,
+    "encheu_vazou": 3.0
+  },
+  {
+    "data": "2025-05-25",
+    "nivel_rio": 28.47,
+    "encheu_vazou": 2.0
+  },
+  {
+    "data": "2025-05-26",
+    "nivel_rio": 28.49,
+    "encheu_vazou": 2.0
+  },
+  {
+    "data": "2025-05-27",
+    "nivel_rio": 28.51,
+    "encheu_vazou": 2.0
+  },
+  {
+    "data": "2025-05-28",
+    "nivel_rio": 28.54,
+    "encheu_vazou": 3.0
+  },
+  {
+    "data": "2025-05-29",
+    "nivel_rio": 28.55,
+    "encheu_vazou": 1.0
   }
 ]
