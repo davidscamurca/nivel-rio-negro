@@ -43,7 +43,7 @@ function removeOutliersIQR(data, key = "level") {
 
 // Gera labels de dia-mês (igual ao Python)
 function generateDayMonthLabels() {
-    const monthAbbr = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    const monthAbbr = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
     const daysInMonth = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]; // 2020 é bissexto
     const labels = [];
     
@@ -57,7 +57,7 @@ function generateDayMonthLabels() {
 
 // Deduplica dados por dia-mês (mantém o último registro, igual ao Python)
 function deduplicateByDayMonth(data) {
-    const monthAbbr = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    const monthAbbr = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
     const map = new Map();
     
     data.forEach(d => {
@@ -174,7 +174,7 @@ function createYearlyChart(data) {
     
     if (mostRecentYearData.length > 0) {
         const lastDate = mostRecentYearData[mostRecentYearData.length - 1].date;
-        const monthAbbr = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+        const monthAbbr = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
         referenceDayMonth = `${String(lastDate.getDate()).padStart(2, "0")}-${monthAbbr[lastDate.getMonth()]}`;
         referenceIndex = dayMonthLabels.indexOf(referenceDayMonth);
         console.log(`Último dia disponível (${mostRecentYear}): ${referenceDayMonth} (índice: ${referenceIndex})`);
@@ -223,7 +223,7 @@ function createYearlyChart(data) {
             mode: "lines",
             name: "Último dado",
             line: {
-                color: "rgba(255, 0, 0, 0.8)",
+                color: "rgba(30, 64, 175, 0.8)",
                 width: 2,
                 dash: "dash"
             },
@@ -301,15 +301,15 @@ function createYearlyChart(data) {
             arrowhead: 2,
             arrowsize: 1,
             arrowwidth: 2,
-            arrowcolor: "red",
+            arrowcolor: "rgba(30, 64, 175, 0.8)",
             ax: 0,
             ay: -30,
             font: {
-                color: "red",
+                color: "rgba(30, 64, 175, 0.8)",
                 size: 12
             },
             bgcolor: "rgba(255,255,255,0.9)",
-            bordercolor: "red",
+            bordercolor: "rgba(30, 64, 175, 0.8)",
             borderwidth: 1
         }] : []
     };
