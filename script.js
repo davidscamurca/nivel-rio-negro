@@ -44,7 +44,7 @@ function removeOutliersIQR(data, key = "level") {
 // Gera labels de dia-mês (igual ao Python)
 function generateDayMonthLabels() {
     const monthAbbr = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
-    const daysInMonth = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]; // 2020 é bissexto
+    const daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]; // Usando 28 dias para fevereiro
     const labels = [];
     
     for (let m = 0; m < 12; m++) {
