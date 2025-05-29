@@ -68,9 +68,86 @@ function deduplicateByDayMonth(data) {
     return map;
 }
 
+// Função para obter configurações responsivas do layout
+function getResponsiveLayout() {
+    const width = window.innerWidth;
+    
+    if (width <= 480) {
+        // Mobile
+        return {
+            margin: { l: 40, r: 20, t: 10, b: 80 },
+            font: { family: "Inter", size: 10 },
+            legend: {
+                orientation: "h",
+                x: 0.5,
+                xanchor: "center",
+                y: -0.25,
+                bgcolor: "rgba(255,255,255,0.9)",
+                bordercolor: "rgba(0,0,0,0.1)",
+                borderwidth: 1,
+                font: { size: 9 }
+            }
+        };
+    } else if (width <= 768) {
+        // Tablet
+        return {
+            margin: { l: 50, r: 25, t: 15, b: 100 },
+            font: { family: "Inter", size: 11 },
+            legend: {
+                orientation: "h",
+                x: 0.5,
+                xanchor: "center",
+                y: -0.22,
+                bgcolor: "rgba(255,255,255,0.9)",
+                bordercolor: "rgba(0,0,0,0.1)",
+                borderwidth: 1,
+                font: { size: 10 }
+            }
+        };
+    } else {
+        // Desktop
+        return {
+            margin: { l: 60, r: 30, t: 20, b: 120 },
+            font: { family: "Inter", size: 12 },
+            legend: {
+                orientation: "h",
+                x: 0.5,
+                xanchor: "center",
+                y: -0.2,
+                bgcolor: "rgba(255,255,255,0.9)",
+                bordercolor: "rgba(0,0,0,0.1)",
+                borderwidth: 1,
+                font: { size: 11 }
+            }
+        };
+    }
+}
+
+// Função para redimensionar os gráficos
+function resizeCharts() {
+    const responsiveLayout = getResponsiveLayout();
+    
+    // Redimensionar gráfico anual
+    if (document.getElementById("yearlyChart")) {
+        Plotly.relayout("yearlyChart", responsiveLayout);
+    }
+    
+    // Redimensionar gráfico diário
+    if (document.getElementById("dailyChart")) {
+        Plotly.relayout("dailyChart", responsiveLayout);
+    }
+}
+
 // Inicialização quando a página carrega
 document.addEventListener("DOMContentLoaded", function() {
     initializeApp();
+    
+    // Adicionar listener de resize com debounce
+    let resizeTimeout;
+    window.addEventListener("resize", function() {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(resizeCharts, 250);
+    });
 });
 
 // Função para inicializar a aplicação
@@ -278,19 +355,7 @@ function createYearlyChart(data) {
             showgrid: false,
             range: [15, null]
         },
-        legend: {
-            orientation: "h",
-            x: 0.5,
-            xanchor: "center",
-            y: -0.2,
-            bgcolor: "rgba(255,255,255,0.9)",
-            bordercolor: "rgba(0,0,0,0.1)",
-            borderwidth: 1
-        },
-        margin: { l: 60, r: 30, t: 20, b: 120 },
-        font: { family: "Inter" },
-        width: 1100,
-        height: 500,
+        ...getResponsiveLayout(),
         annotations: referenceDayMonth ? [{
             x: referenceDayMonth,
             y: 0.95,
@@ -379,19 +444,7 @@ function createDailyChart(data) {
             title: "Nível do Rio (m)",
             showgrid: false
         },
-        legend: {
-            orientation: "h",
-            x: 0.5,
-            xanchor: "center",
-            y: -0.2,
-            bgcolor: "rgba(255,255,255,0.9)",
-            bordercolor: "rgba(0,0,0,0.1)",
-            borderwidth: 1
-        },
-        margin: { l: 60, r: 30, t: 20, b: 120 },
-        font: { family: "Inter" },
-        width: 1100,
-        height: 500
+        ...getResponsiveLayout()
     };
     
     const config = {

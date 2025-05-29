@@ -266,7 +266,6 @@ body {
 
 .chart-wrapper > div {
     width: 100% !important;
-    height: 500px !important;
 }
 
 /* Info section */
@@ -434,8 +433,9 @@ body {
     }
     
     .chart-wrapper {
-        height: 350px;
-        margin: 0 -var(--spacing-2);
+        margin: 0 -var(--spacing-1);
+        border-radius: var(--border-radius-md);
+        overflow: hidden;
     }
     
     .chart-title {
@@ -521,7 +521,6 @@ body {
     }
     
     .chart-wrapper {
-        height: 280px;
         margin: 0 -var(--spacing-1);
         border-radius: var(--border-radius-md);
         overflow: hidden;
@@ -589,7 +588,6 @@ body {
     }
     
     .chart-wrapper {
-        height: 250px;
         margin: 0;
     }
     
@@ -629,7 +627,6 @@ body {
     }
     
     .chart-wrapper {
-        height: 200px;
     }
     
     .footer {
