@@ -89,7 +89,9 @@ async function initializeApp() {
 async function loadData() {
     console.log("Carregando dados...");
     try {
-        const response = await fetch("./data/rio-negro-data.json");
+        // Adiciona timestamp para evitar cache
+        const timestamp = new Date().getTime();
+        const response = await fetch(`./data/rio-negro-data.json?v=${timestamp}`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
