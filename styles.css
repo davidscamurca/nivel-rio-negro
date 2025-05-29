@@ -847,9 +847,9 @@ select:focus {
 }
 
 .newsletter-container {
-    background: var(--white);
+    background: linear-gradient(135deg, var(--primary-light) 0%, var(--white) 100%);
     border-radius: var(--border-radius-lg);
-    padding: var(--spacing-6);
+    padding: 20px;
     box-shadow: var(--shadow-md);
     border: 1px solid var(--gray-200);
 }
@@ -940,7 +940,7 @@ select:focus {
 /* Responsive adjustments for newsletter */
 @media (max-width: 768px) {
     .newsletter-container {
-        padding: var(--spacing-4);
+        padding: 20px;
     }
     
     .newsletter-title {
@@ -968,7 +968,7 @@ select:focus {
 
 @media (max-width: 480px) {
     .newsletter-container {
-        padding: var(--spacing-3);
+        padding: 20px;
     }
     
     .newsletter-title {
