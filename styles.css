@@ -150,7 +150,7 @@ body {
 }
 
 .stat-value {
-    font-size: var(--font-size-2xl);
+    font-size: var(--font-size-4xl);
     font-weight: 700;
     color: var(--primary);
     margin-bottom: var(--spacing-2);
@@ -409,7 +409,7 @@ body {
     }
     
     .stat-value {
-        font-size: var(--font-size-xl);
+        font-size: var(--font-size-3xl);
         margin-bottom: var(--spacing-2);
     }
     
