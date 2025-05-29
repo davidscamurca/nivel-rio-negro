@@ -88,15 +88,15 @@ export function getStatistics(data) {
     
     const avgVariation = variations.reduce((a, b) => a + b, 0) / variations.length;
     
-    if (avgVariation > 0.02) { // Subindo mais de 2cm por dia em média
+    if (avgVariation > 0.005) { // Subindo mais de 0,5cm por dia em média
       riverStatus = "Enchendo";
-      statusInfo = `+${(avgVariation * 100).toFixed(0)}cm/dia`;
-    } else if (avgVariation < -0.02) { // Descendo mais de 2cm por dia em média
+      statusInfo = `+${(avgVariation * 100).toFixed(1)}cm/dia`;
+    } else if (avgVariation < -0.005) { // Descendo mais de 0,5cm por dia em média
       riverStatus = "Vazando";
-      statusInfo = `${(avgVariation * 100).toFixed(0)}cm/dia`;
+      statusInfo = `${(avgVariation * 100).toFixed(1)}cm/dia`;
     } else {
       riverStatus = "Parado";
-      statusInfo = "Variação < 2cm/dia";
+      statusInfo = "Variação < 0,5cm/dia";
     }
   }
 

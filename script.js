@@ -2,7 +2,7 @@
 import {
     calculateMovingAverage,
     getStatistics
-} from "./js/utils.js";
+} from "./js/utils.js?v=1.0.1";
 
 // Variáveis globais
 let allData = [];
@@ -75,6 +75,7 @@ function getResponsiveLayout() {
     if (width <= 480) {
         // Mobile
         return {
+            height: 400,
             margin: { l: 40, r: 20, t: 10, b: 80 },
             font: { family: "Inter", size: 10 },
             legend: {
@@ -91,6 +92,7 @@ function getResponsiveLayout() {
     } else if (width <= 768) {
         // Tablet
         return {
+            height: 500,
             margin: { l: 50, r: 25, t: 15, b: 100 },
             font: { family: "Inter", size: 11 },
             legend: {
@@ -107,6 +109,7 @@ function getResponsiveLayout() {
     } else {
         // Desktop
         return {
+            height: 600,
             margin: { l: 60, r: 30, t: 20, b: 120 },
             font: { family: "Inter", size: 12 },
             legend: {
@@ -471,4 +474,4 @@ window.riverApp = {
     exportData,
     riverData: () => allData,
     removeOutliers: () => removeOutliersIQR(allData)
-}; 
+};
