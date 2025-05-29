@@ -1,12 +1,4 @@
 {
-  "functions": {
-    "api/newsletter.js": {
-      "runtime": "@vercel/node@18"
-    },
-    "api/get-emails.js": {
-      "runtime": "@vercel/node@18"
-    }
-  },
   "headers": [
     {
       "source": "/api/(.*)",
