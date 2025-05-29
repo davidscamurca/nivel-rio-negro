@@ -991,4 +991,34 @@ select:focus {
     .newsletter-btn {
         width: 100%;
     }
+}
+
+/* Newsletter disabled styles */
+.newsletter-input-disabled {
+    background: var(--gray-100) !important;
+    color: var(--gray-400) !important;
+    cursor: not-allowed !important;
+    border-color: var(--gray-200) !important;
+}
+
+.newsletter-input-disabled::placeholder {
+    color: var(--gray-300) !important;
+}
+
+.newsletter-btn-disabled {
+    background: var(--gray-300) !important;
+    color: var(--gray-500) !important;
+    cursor: not-allowed !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+.newsletter-btn-disabled:hover {
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.newsletter-form-disabled {
+    margin-bottom: var(--spacing-4);
+    opacity: 0.7;
 } 
