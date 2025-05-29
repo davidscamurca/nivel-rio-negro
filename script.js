@@ -160,37 +160,68 @@ document.addEventListener("DOMContentLoaded", function() {
         newsletterForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            const email = emailInput.value.trim();
-            
-            if (!email) {
-                alert('Por favor, digite um email válido.');
-                return;
-            }
-            
-            // Validação básica de email
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                alert('Por favor, digite um email válido.');
-                return;
-            }
-            
-            // Simular cadastro (por enquanto)
-            const button = newsletterForm.querySelector('.newsletter-btn');
-            const originalText = button.textContent;
-            
-            button.textContent = 'Cadastrando...';
-            button.disabled = true;
-            
-            // Simular delay de cadastro
-            setTimeout(() => {
-                alert(`✅ Email ${email} cadastrado com sucesso!\n\nVocê receberá atualizações diárias sobre o nível do Rio Negro.\n\n📧 Primeiro email chegará amanhã às 8h!\n\n💡 Para ativar o envio real, adicione seu email manualmente aos GitHub Secrets.`);
-                emailInput.value = '';
+            try {
+                const email = emailInput.value.trim();
+                
+                if (!email) {
+                    alert('Por favor, digite um email válido.');
+                    return;
+                }
+                
+                // Validação básica de email
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    alert('Por favor, digite um email válido.');
+                    return;
+                }
+                
+                // Cadastro real via API Vercel
+                const button = newsletterForm.querySelector('.newsletter-btn');
+                const originalText = button.textContent;
+                
+                button.textContent = 'Cadastrando...';
+                button.disabled = true;
+                
+                // Fazer requisição para API
+                const response = await fetch('/api/newsletter', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email: email })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert(`✅ Email ${email} cadastrado com sucesso!\n\nVocê receberá atualizações diárias sobre o nível do Rio Negro.\n\n📧 Primeiro email chegará amanhã às 8h!\n\n📊 Total de inscritos: ${result.total}`);
+                    emailInput.value = '';
+                    
+                    // Atualizar contador na interface
+                    updateSubscriberCount();
+                } else {
+                    if (result.error === 'Email já cadastrado') {
+                        alert(`⚠️ O email ${email} já está cadastrado na nossa newsletter!`);
+                    } else {
+                        alert(`❌ Erro: ${result.error}`);
+                    }
+                }
+                
                 button.textContent = originalText;
                 button.disabled = false;
                 
-                // Mostrar contador atualizado
-                updateSubscriberCount();
-            }, 1500);
+            } catch (error) {
+                console.error('Erro no formulário da newsletter:', error);
+                
+                // Restaurar botão em caso de erro
+                const button = newsletterForm.querySelector('.newsletter-btn');
+                if (button) {
+                    button.textContent = 'Cadastrar';
+                    button.disabled = false;
+                }
+                
+                alert('Erro ao cadastrar email. Verifique sua conexão e tente novamente.');
+            }
         });
     }
 });
@@ -198,10 +229,17 @@ document.addEventListener("DOMContentLoaded", function() {
 // Função para atualizar contador de inscritos
 async function updateSubscriberCount() {
     try {
-        const response = await fetch('./data/newsletter-emails.json');
-        const data = await response.json();
+        console.log('Carregando contador de inscritos da API...');
+        const response = await fetch('/api/newsletter');
         
-        // Mostrar contador na interface (opcional)
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
+        const data = await response.json();
+        console.log('Dados do contador carregados:', data);
+        
+        // Mostrar contador na interface
         if (data.total_subscribers > 0) {
             const noteElement = document.querySelector('.newsletter-note');
             if (noteElement) {
@@ -209,10 +247,27 @@ async function updateSubscriberCount() {
                     Gratuito • Dados atualizados diariamente • Cancele quando quiser<br>
                     <small style="opacity: 0.7;">📊 ${data.total_subscribers} pessoas já cadastradas</small>
                 `;
+                console.log('Contador atualizado na interface');
             }
         }
     } catch (error) {
-        console.log('Não foi possível carregar contador de inscritos');
+        console.warn('Não foi possível carregar contador de inscritos:', error.message);
+        // Fallback para arquivo local se API não estiver disponível
+        try {
+            const response = await fetch('./data/newsletter-emails.json');
+            const data = await response.json();
+            if (data.total_subscribers > 0) {
+                const noteElement = document.querySelector('.newsletter-note');
+                if (noteElement) {
+                    noteElement.innerHTML = `
+                        Gratuito • Dados atualizados diariamente • Cancele quando quiser<br>
+                        <small style="opacity: 0.7;">📊 ${data.total_subscribers} pessoas já cadastradas</small>
+                    `;
+                }
+            }
+        } catch (fallbackError) {
+            console.warn('Fallback também falhou:', fallbackError.message);
+        }
     }
 }
 

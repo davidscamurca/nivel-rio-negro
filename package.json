@@ -1,13 +1,25 @@
 {
   "name": "nivel-rio-negro",
-  "version": "0.0.1",
-  "description": "Monitoramento do Nível do Rio Negro - site estático",
+  "version": "1.0.0",
+  "description": "Sistema de monitoramento do Rio Negro com newsletter automática",
+  "main": "index.html",
   "scripts": {
-    "lint": "eslint .",
-    "format": "prettier --write ."
+    "dev": "vercel dev",
+    "build": "echo 'Build completed'",
+    "start": "python -m http.server 8000"
+  },
+  "dependencies": {
+    "@vercel/kv": "^1.0.1"
   },
   "devDependencies": {
-    "eslint": "^8.0.0",
-    "prettier": "^3.0.0"
-  }
+    "vercel": "^33.0.0"
+  },
+  "keywords": [
+    "rio-negro",
+    "manaus",
+    "newsletter",
+    "monitoramento"
+  ],
+  "author": "Bemol",
+  "license": "MIT"
 } 
