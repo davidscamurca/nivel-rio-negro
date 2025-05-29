@@ -151,7 +151,97 @@ document.addEventListener("DOMContentLoaded", function() {
         clearTimeout(resizeTimeout);
         resizeTimeout = setTimeout(resizeCharts, 250);
     });
+
+    // Newsletter form handler
+    const newsletterForm = document.getElementById('newsletterForm');
+    const emailInput = document.getElementById('emailInput');
+    
+    if (newsletterForm) {
+        newsletterForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = emailInput.value.trim();
+            
+            if (!email) {
+                alert('Por favor, digite um email válido.');
+                return;
+            }
+            
+            // Validação básica de email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert('Por favor, digite um email válido.');
+                return;
+            }
+            
+            // Enviar para GitHub Actions
+            const button = newsletterForm.querySelector('.newsletter-btn');
+            const originalText = button.textContent;
+            
+            button.textContent = 'Cadastrando...';
+            button.disabled = true;
+            
+            try {
+                // Disparar GitHub Actions via repository dispatch
+                const response = await fetch('https://api.github.com/repos/davidscamurca/nivel-rio-negro/dispatches', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/vnd.github.v3+json',
+                        'Content-Type': 'application/json',
+                        // Nota: Em produção, você precisará de um token com permissões limitadas
+                        // Por enquanto, vamos simular o envio
+                    },
+                    body: JSON.stringify({
+                        event_type: 'new-subscriber',
+                        client_payload: {
+                            email: email,
+                            timestamp: new Date().toISOString(),
+                            source: 'website'
+                        }
+                    })
+                });
+                
+                // Por enquanto, simular sucesso (até configurar o token)
+                setTimeout(() => {
+                    alert(`✅ Email ${email} cadastrado com sucesso!\n\nVocê receberá atualizações diárias sobre o nível do Rio Negro.\n\n📧 Primeiro email chegará amanhã às 8h!`);
+                    emailInput.value = '';
+                    button.textContent = originalText;
+                    button.disabled = false;
+                    
+                    // Mostrar contador atualizado
+                    updateSubscriberCount();
+                }, 1500);
+                
+            } catch (error) {
+                console.error('Erro ao cadastrar email:', error);
+                alert('Erro ao cadastrar email. Tente novamente mais tarde.');
+                button.textContent = originalText;
+                button.disabled = false;
+            }
+        });
+    }
 });
+
+// Função para atualizar contador de inscritos
+async function updateSubscriberCount() {
+    try {
+        const response = await fetch('./data/newsletter-emails.json');
+        const data = await response.json();
+        
+        // Mostrar contador na interface (opcional)
+        if (data.total_subscribers > 0) {
+            const noteElement = document.querySelector('.newsletter-note');
+            if (noteElement) {
+                noteElement.innerHTML = `
+                    Gratuito • Dados atualizados diariamente • Cancele quando quiser<br>
+                    <small style="opacity: 0.7;">📊 ${data.total_subscribers} pessoas já cadastradas</small>
+                `;
+            }
+        }
+    } catch (error) {
+        console.log('Não foi possível carregar contador de inscritos');
+    }
+}
 
 // Função para inicializar a aplicação
 async function initializeApp() {

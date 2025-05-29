@@ -1,0 +1,63 @@
+name: Newsletter Rio Negro
+
+on:
+  # Executa todo dia às 8h (horário UTC, 5h horário de Manaus)
+  schedule:
+    - cron: '0 8 * * *'
+  
+  # Permite execução manual
+  workflow_dispatch:
+  
+  # Executa quando há mudanças nos secrets (novos emails)
+  repository_dispatch:
+    types: [new-subscriber]
+
+jobs:
+  send-newsletter:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: Install dependencies
+      run: |
+        pip install pandas plotly matplotlib seaborn kaleido smtplib-ssl
+        
+    - name: Generate newsletter
+      env:
+        NEWSLETTER_EMAILS: ${{ secrets.NEWSLETTER_EMAILS }}
+        GMAIL_USER: ${{ secrets.GMAIL_USER }}
+        GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
+      run: |
+        python scripts/send_newsletter.py
+        
+    - name: Update subscriber count
+      run: |
+        python scripts/update_subscriber_count.py
+        
+    - name: Commit changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add data/newsletter-emails.json
+        git diff --staged --quiet || git commit -m "📊 Atualizar contador de inscritos da newsletter"
+        git push
+
+  add-subscriber:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'repository_dispatch' && github.event.action == 'new-subscriber'
+    
+    steps:
+    - name: Add new subscriber
+      env:
+        NEWSLETTER_EMAILS: ${{ secrets.NEWSLETTER_EMAILS }}
+        NEW_EMAIL: ${{ github.event.client_payload.email }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        python scripts/add_subscriber.py 
