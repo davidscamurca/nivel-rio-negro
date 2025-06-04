@@ -31,7 +31,5 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        echo "Dados atualizados em $(date)" > last_update.txt
-        git add last_update.txt
         git diff --staged --quiet || git commit -m "📊 Atualizar dados do Rio Negro"
         git push 
