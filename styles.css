@@ -801,9 +801,9 @@ select:focus {
 .stat-card[title]:hover::after {
     content: attr(title);
     position: absolute;
-    bottom: 100%;
-    left: 50%;
-    transform: translateX(-50%);
+    top: 50%;
+    right: 100%;
+    transform: translateY(-50%);
     background: var(--gray-800);
     color: var(--white);
     padding: var(--spacing-3);
@@ -811,24 +811,24 @@ select:focus {
     font-size: var(--font-size-sm);
     line-height: 1.4;
     white-space: pre-line;
-    z-index: 1000;
+    z-index: 99999;
     box-shadow: var(--shadow-lg);
     min-width: 280px;
     max-width: 320px;
     text-align: left;
-    margin-bottom: var(--spacing-2);
+    margin-right: var(--spacing-2);
 }
 
 .stat-card[title]:hover::before {
     content: "";
     position: absolute;
-    bottom: 100%;
-    left: 50%;
-    transform: translateX(-50%);
+    top: 50%;
+    right: 100%;
+    transform: translateY(-50%);
     border: 6px solid transparent;
-    border-top-color: var(--gray-800);
-    margin-bottom: -6px;
-    z-index: 1001;
+    border-left-color: var(--gray-800);
+    margin-right: -6px;
+    z-index: 100000;
 }
 
 /* Ajustes para mobile */
