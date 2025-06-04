@@ -264,6 +264,11 @@ body {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+/* Primeiro gráfico mais estreito */
+.chart-section-narrow .chart-wrapper {
+    max-width: 950px;
+}
+
 .chart-wrapper > div {
     width: 100% !important;
 }
@@ -793,13 +798,13 @@ select:focus {
 }
 
 /* Tooltip customizado para o card de situação do rio */
-.stat-card[title]:hover {
+.stat-card[data-tooltip]:hover {
     position: relative;
     cursor: help;
 }
 
-.stat-card[title]:hover::after {
-    content: attr(title);
+.stat-card[data-tooltip]:hover::after {
+    content: attr(data-tooltip);
     position: absolute;
     top: 50%;
     right: 100%;
@@ -819,7 +824,7 @@ select:focus {
     margin-right: var(--spacing-2);
 }
 
-.stat-card[title]:hover::before {
+.stat-card[data-tooltip]:hover::before {
     content: "";
     position: absolute;
     top: 50%;
@@ -833,7 +838,7 @@ select:focus {
 
 /* Ajustes para mobile */
 @media (max-width: 768px) {
-    .stat-card[title]:hover::after {
+    .stat-card[data-tooltip]:hover::after {
         min-width: 250px;
         max-width: 280px;
         font-size: var(--font-size-xs);
@@ -1021,4 +1026,10 @@ select:focus {
 .newsletter-form-disabled {
     margin-bottom: var(--spacing-4);
     opacity: 0.7;
+}
+
+/* Newsletter também mais estreita */
+.newsletter-section-narrow .newsletter-container {
+    max-width: 950px;
+    margin: 0 auto;
 } 
