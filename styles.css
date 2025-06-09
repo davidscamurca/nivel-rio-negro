@@ -395,8 +395,8 @@ body {
 
 /* Responsive design - Mobile First Approach */
 
-/* Tablet - 768px and down */
-@media (max-width: 768px) {
+/* Tablet - 1024px and down */
+@media (max-width: 1024px) {
     .container {
         padding: 0 var(--spacing-4);
     }
