@@ -179,10 +179,15 @@ async function loadData() {
         console.log("Dados brutos recebidos:", rawData.length, "registros");
 
         // Processar os dados
-        allData = rawData.map(item => ({
-            date: new Date(item.data),
-            level: parseFloat(item.nivel_rio)
-        })).sort((a, b) => a.date - b.date);
+        allData = rawData.map(item => {
+            // Criar data no fuso horário local para evitar problemas de UTC
+            const [year, month, day] = item.data.split('-').map(Number);
+            const date = new Date(year, month - 1, day); // month - 1 porque Date usa 0-11
+            return {
+                date: date,
+                level: parseFloat(item.nivel_rio)
+            };
+        }).sort((a, b) => a.date - b.date);
 
         console.log("Dados processados:", allData.length, "registros");
         console.log("Primeiro registro:", allData[0]);
@@ -249,6 +254,10 @@ function createYearlyChart(data) {
     const mostRecentYear = yearsWithData[0];
     const mostRecentYearData = data.filter(d => d.date.getFullYear() === mostRecentYear);
     
+    console.log("DEBUG - Anos com dados:", yearsWithData);
+    console.log("DEBUG - Ano mais recente:", mostRecentYear);
+    console.log("DEBUG - Dados do ano mais recente:", mostRecentYearData.length, "registros");
+    
     let referenceDayMonth = null;
     let referenceIndex = null;
     
@@ -257,8 +266,9 @@ function createYearlyChart(data) {
         const monthAbbr = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
         referenceDayMonth = `${String(lastDate.getDate()).padStart(2, "0")}-${monthAbbr[lastDate.getMonth()]}`;
         referenceIndex = dayMonthLabels.indexOf(referenceDayMonth);
-        console.log(`Último dia disponível (${mostRecentYear}): ${referenceDayMonth} (índice: ${referenceIndex})`);
-        console.log(`Data de referência: ${lastDate.toLocaleDateString("pt-BR")}`);
+        console.log(`DEBUG - Último dia disponível (${mostRecentYear}): ${referenceDayMonth} (índice: ${referenceIndex})`);
+        console.log(`DEBUG - Data de referência: ${lastDate.toLocaleDateString("pt-BR")}`);
+        console.log(`DEBUG - Data completa: ${lastDate.toISOString()}`);
     }
     
     // Processar dados para cada ano
