@@ -46416,7 +46416,7 @@
   },
   {
     "data": "2025-06-01",
-    "nivel_rio": 28.60,
+    "nivel_rio": 28.6,
     "encheu_vazou": 1.0
   },
   {
@@ -46496,7 +46496,7 @@
   },
   {
     "data": "2025-06-17",
-    "nivel_rio": 28.90,
+    "nivel_rio": 28.9,
     "encheu_vazou": 1.0
   },
   {
@@ -46551,7 +46551,7 @@
   },
   {
     "data": "2025-06-28",
-    "nivel_rio": 29.00,
+    "nivel_rio": 29.0,
     "encheu_vazou": 1.0
   },
   {
@@ -46598,5 +46598,10 @@
     "data": "2025-07-07",
     "nivel_rio": 29.05,
     "encheu_vazou": 0.0
+  },
+  {
+    "data": "2025-07-07",
+    "nivel_rio": 29.05,
+    "encheu_vazou": 0.1
   }
 ]
