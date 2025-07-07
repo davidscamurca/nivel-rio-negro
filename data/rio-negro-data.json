@@ -46568,6 +46568,36 @@
     "data": "2025-07-01",
     "nivel_rio": 29.02,
     "encheu_vazou": 0.0
+  },
+  {
+    "data": "2025-07-02",
+    "nivel_rio": 29.02,
+    "encheu_vazou": 0.0
+  },
+  {
+    "data": "2025-07-03",
+    "nivel_rio": 29.03,
+    "encheu_vazou": 1.0
+  },
+  {
+    "data": "2025-07-04",
+    "nivel_rio": 29.04,
+    "encheu_vazou": 1.0
+  },
+  {
+    "data": "2025-07-05",
+    "nivel_rio": 29.05,
+    "encheu_vazou": 1.0
+  },
+  {
+    "data": "2025-07-06",
+    "nivel_rio": 29.05,
+    "encheu_vazou": 0.0
+  },
+  {
+    "data": "2025-07-07",
+    "nivel_rio": 29.05,
+    "encheu_vazou": 0.0
   }
 
 ]
