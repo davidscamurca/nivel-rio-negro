@@ -1,31 +1,46 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nível do Rio Negro Manaus</title>
-    
+
     <!-- Meta tags para controle de cache -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    
+
     <link rel="stylesheet" href="styles.css?v=1.1.5">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+
     <!-- Headers de Segurança via Meta Tags (única opção no GitHub Pages) -->
     <meta http-equiv="X-Frame-Options" content="DENY">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-    <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), speaker=(), vibrate=(), fullscreen=(self)">
-    
+    <meta http-equiv="Permissions-Policy"
+        content="geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), speaker=(), vibrate=(), fullscreen=(self)">
+
     <!-- Content Security Policy - Compatível com Plotly.js -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none';">
-    
+    <meta http-equiv="Content-Security-Policy"
+    content="
+        default-src 'self';
+        script-src 'self' 'unsafe-inline' 'unsafe-eval';
+        style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+        font-src 'self' https://fonts.gstatic.com;
+        img-src 'self' data: blob:;
+        connect-src 'self' http://localhost:7071 https://emailsave-func-dev.azurewebsites.net;
+        object-src 'none';
+        base-uri 'self';
+        form-action 'self';
+        frame-ancestors 'none';
+    ">
+
     <script src="plotly-latest.min.js"></script>
 </head>
+
 <body>
     <header class="header">
         <div class="container">
@@ -52,12 +67,14 @@
                         <div class="stat-label">Mínimo Histórico</div>
                         <div class="stat-date" id="min-date">--</div>
                     </div>
-                    <div class="stat-card" data-tooltip="Como interpretar a Variação 7 dias:&#10;• Mostra quanto o nível do rio subiu ou desceu nos últimos 7 dias&#10;• Valor positivo (+): Rio subiu neste período&#10;• Valor negativo (-): Rio desceu neste período&#10;• Exemplo: +0,13m = Rio subiu 13cm em 7 dias">
+                    <div class="stat-card"
+                        data-tooltip="Como interpretar a Variação 7 dias:&#10;• Mostra quanto o nível do rio subiu ou desceu nos últimos 7 dias&#10;• Valor positivo (+): Rio subiu neste período&#10;• Valor negativo (-): Rio desceu neste período&#10;• Exemplo: +0,13m = Rio subiu 13cm em 7 dias">
                         <div class="stat-value" id="variation-7d">--</div>
                         <div class="stat-label">Variação 7 dias</div>
                         <div class="stat-date" id="variation-info">--</div>
                     </div>
-                    <div class="stat-card" data-tooltip="Como interpretar:&#10;• Status: Enchendo (>0,5cm/dia), Vazando (<-0,5cm/dia), Parado (±0,5cm/dia)&#10;• Velocidade: Média dos últimos 3 dias&#10;• Exemplo: +2,0cm/dia = Rio subindo 2cm por dia">
+                    <div class="stat-card"
+                        data-tooltip="Como interpretar:&#10;• Status: Enchendo (>0,5cm/dia), Vazando (<-0,5cm/dia), Parado (±0,5cm/dia)&#10;• Velocidade: Média dos últimos 3 dias&#10;• Exemplo: +2,0cm/dia = Rio subindo 2cm por dia">
                         <div class="stat-value" id="river-status">--</div>
                         <div class="stat-label">Situação do Rio</div>
                         <div class="stat-date" id="status-info">--</div>
@@ -79,32 +96,29 @@
                 </div>
             </section>
 
-            <!-- <section class="newsletter-section newsletter-section-narrow">
+            <section class="newsletter-section newsletter-section-narrow">
                 <div class="newsletter-container">
                     <div class="newsletter-content">
-                        <h2 class="newsletter-title">📧 Newsletter Diária - Em Breve</h2>
+                        <h2 class="newsletter-title">📧 Newsletter Diária - Já Disponível</h2>
                         <p class="newsletter-description">
-                            Em breve você poderá se cadastrar para receber relatórios diários com gráficos e estatísticas do nível do Rio Negro diretamente no seu email.
+                            Agora você pode se cadastrar para receber relatórios diários com gráficos e estatísticas do
+                            nível do Rio Negro diretamente no seu email.
                         </p>
-                        <div class="newsletter-form-disabled">
+                        <div class="newsletter-form-enabled">
                             <div class="newsletter-input-group">
-                                <input 
-                                    type="email" 
-                                    placeholder="Digite seu email" 
-                                    disabled
-                                    class="newsletter-input newsletter-input-disabled"
-                                >
-                                <button type="button" disabled class="newsletter-btn newsletter-btn-disabled">
-                                    Em Breve
-                                </button>
+                                <input type="email" placeholder="Digite seu email" class="newsletter-input"
+                                    id="newsletterEmail">
+                                <button type="button" class="newsletter-btn" id="subscribeBtn">Assinar</button>
                             </div>
                         </div>
+                        <!-- Mensagem de sucesso ou erro -->
+                        <p id="newsletterFeedback" style="margin-top: 10px; font-weight: bold;"></p>
                         <p class="newsletter-note">
-                            🚧 Funcionalidade em desenvolvimento • Será gratuita • Dados atualizados diariamente
+                            ✅ Funcionalidade disponível • Gratuita • Dados atualizados diariamente
                         </p>
                     </div>
                 </div>
-            </section> -->
+            </section>
         </div>
     </main>
 
@@ -138,4 +152,5 @@
 
     <script type="module" src="script.js?v=1.0.4"></script>
 </body>
-</html> 
+
+</html>

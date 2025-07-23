@@ -43,10 +43,10 @@ function removeOutliersIQR(data, key = "level") {
 
 // Gera labels de dia-mês (igual ao Python)
 function generateDayMonthLabels() {
-    const monthAbbr = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
+    const monthAbbr = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
     const daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]; // Usando 28 dias para fevereiro
     const labels = [];
-    
+
     for (let m = 0; m < 12; m++) {
         for (let d = 1; d <= daysInMonth[m]; d++) {
             labels.push(`${String(d).padStart(2, "0")}-${monthAbbr[m]}`);
@@ -57,21 +57,21 @@ function generateDayMonthLabels() {
 
 // Deduplica dados por dia-mês (mantém o último registro, igual ao Python)
 function deduplicateByDayMonth(data) {
-    const monthAbbr = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
+    const monthAbbr = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
     const map = new Map();
-    
+
     data.forEach(d => {
         const dayMonth = `${String(d.date.getDate()).padStart(2, "0")}-${monthAbbr[d.date.getMonth()]}`;
         map.set(dayMonth, d.level); // sobrescreve, mantendo o último
     });
-    
+
     return map;
 }
 
 // Função para obter configurações responsivas do layout
 function getResponsiveLayout() {
     const width = window.innerWidth;
-    
+
     if (width <= 480) {
         // Mobile
         return {
@@ -129,12 +129,12 @@ function getResponsiveLayout() {
 // Função para redimensionar os gráficos
 function resizeCharts() {
     const responsiveLayout = getResponsiveLayout();
-    
+
     // Redimensionar gráfico anual
     if (document.getElementById("yearlyChart")) {
         Plotly.relayout("yearlyChart", responsiveLayout);
     }
-    
+
     // Redimensionar gráfico diário
     if (document.getElementById("dailyChart")) {
         Plotly.relayout("dailyChart", responsiveLayout);
@@ -142,12 +142,12 @@ function resizeCharts() {
 }
 
 // Inicialização quando a página carrega
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     initializeApp();
-    
+
     // Adicionar listener de resize com debounce
     let resizeTimeout;
-    window.addEventListener("resize", function() {
+    window.addEventListener("resize", function () {
         clearTimeout(resizeTimeout);
         resizeTimeout = setTimeout(resizeCharts, 250);
     });
@@ -201,7 +201,7 @@ async function loadData() {
 // Função para atualizar a interface
 function updateUI() {
     console.log("Atualizando interface...");
-    
+
     // Atualizar estatísticas (sem outliers para consistência)
     const dataNoOutliers = removeOutliersIQR(allData);
     const stats = getStatistics(dataNoOutliers);
@@ -216,29 +216,29 @@ function updateUI() {
 function updateStatistics(stats) {
     // Nível atual
     document.getElementById("current-level").textContent = `${stats.current.toFixed(2)}m`;
-    document.getElementById("current-date").textContent = stats.currentDate ? 
+    document.getElementById("current-date").textContent = stats.currentDate ?
         stats.currentDate.toLocaleDateString("pt-BR") : "--";
-    
+
     // Máximo histórico
     document.getElementById("max-level").textContent = `${stats.max.toFixed(2)}m`;
-    document.getElementById("max-date").textContent = stats.maxDate ? 
+    document.getElementById("max-date").textContent = stats.maxDate ?
         stats.maxDate.toLocaleDateString("pt-BR") : "--";
-    
+
     // Mínimo histórico
     document.getElementById("min-level").textContent = `${stats.min.toFixed(2)}m`;
-    document.getElementById("min-date").textContent = stats.minDate ? 
+    document.getElementById("min-date").textContent = stats.minDate ?
         stats.minDate.toLocaleDateString("pt-BR") : "--";
-    
+
     // Variação 7 dias
     document.getElementById("variation-7d").textContent = stats.variation7dInfo;
     const variationColor = stats.variation7d > 0 ? "#10b981" : stats.variation7d < 0 ? "#ef4444" : "#6b7280";
     document.getElementById("variation-7d").style.color = variationColor;
     document.getElementById("variation-info").textContent = "últimos 7 dias";
-    
+
     // Situação do rio
     document.getElementById("river-status").textContent = stats.riverStatus;
-    const statusColor = stats.riverStatus === "Enchendo" ? "#10b981" : 
-                       stats.riverStatus === "Vazando" ? "#ef4444" : "#6b7280";
+    const statusColor = stats.riverStatus === "Enchendo" ? "#10b981" :
+        stats.riverStatus === "Vazando" ? "#ef4444" : "#6b7280";
     document.getElementById("river-status").style.color = statusColor;
     document.getElementById("status-info").textContent = stats.statusInfo;
 }
@@ -248,29 +248,29 @@ function createYearlyChart(data) {
     const dayMonthLabels = generateDayMonthLabels();
     const currentYear = new Date().getFullYear();
     const traces = [];
-    
+
     // Encontrar o último dia disponível no ano mais atual dos dados
     const yearsWithData = [...new Set(data.map(d => d.date.getFullYear()))].sort((a, b) => b - a);
     const mostRecentYear = yearsWithData[0];
     const mostRecentYearData = data.filter(d => d.date.getFullYear() === mostRecentYear);
-    
+
     console.log("DEBUG - Anos com dados:", yearsWithData);
     console.log("DEBUG - Ano mais recente:", mostRecentYear);
     console.log("DEBUG - Dados do ano mais recente:", mostRecentYearData.length, "registros");
-    
+
     let referenceDayMonth = null;
     let referenceIndex = null;
-    
+
     if (mostRecentYearData.length > 0) {
         const lastDate = mostRecentYearData[mostRecentYearData.length - 1].date;
-        const monthAbbr = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
+        const monthAbbr = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
         referenceDayMonth = `${String(lastDate.getDate()).padStart(2, "0")}-${monthAbbr[lastDate.getMonth()]}`;
         referenceIndex = dayMonthLabels.indexOf(referenceDayMonth);
         console.log(`DEBUG - Último dia disponível (${mostRecentYear}): ${referenceDayMonth} (índice: ${referenceIndex})`);
         console.log(`DEBUG - Data de referência: ${lastDate.toLocaleDateString("pt-BR")}`);
         console.log(`DEBUG - Data completa: ${lastDate.toISOString()}`);
     }
-    
+
     // Processar dados para cada ano
     for (let year = 2019; year <= 2025; year++) {
         const yearData = data.filter(d => d.date.getFullYear() === year);
@@ -278,7 +278,7 @@ function createYearlyChart(data) {
             // Deduplica por dia-mês
             const dayMonthMap = deduplicateByDayMonth(yearData);
             const yValues = dayMonthLabels.map(label => dayMonthMap.get(label) || null);
-            
+
             // Estilo da linha baseado no ano
             let lineWidth;
             if (year == currentYear) {
@@ -288,7 +288,7 @@ function createYearlyChart(data) {
             } else {
                 lineWidth = 1.5;
             }
-            
+
             traces.push({
                 x: dayMonthLabels,
                 y: yValues,
@@ -303,7 +303,7 @@ function createYearlyChart(data) {
             });
         }
     }
-    
+
     // Adicionar linha vertical no dia de referência (último dia disponível)
     if (referenceDayMonth && referenceIndex !== -1) {
         traces.push({
@@ -320,14 +320,14 @@ function createYearlyChart(data) {
             showlegend: true,
             hoverinfo: "skip"
         });
-        
+
         // Adicionar pontos destacados no dia de referência para cada ano
         for (let year = 2019; year <= 2025; year++) {
             const yearData = data.filter(d => d.date.getFullYear() === year);
             if (yearData.length > 0) {
                 const dayMonthMap = deduplicateByDayMonth(yearData);
                 const valueAtReference = dayMonthMap.get(referenceDayMonth);
-                
+
                 if (valueAtReference !== undefined && valueAtReference !== null) {
                     traces.push({
                         x: [referenceDayMonth],
@@ -346,15 +346,15 @@ function createYearlyChart(data) {
                         },
                         showlegend: false,
                         hovertemplate: `<b>Nível ${year}</b><br>` +
-                                     `Data: ${referenceDayMonth}<br>` +
-                                     `Nível: ${valueAtReference.toFixed(2)}m<br>` +
-                                     "<extra></extra>"
+                            `Data: ${referenceDayMonth}<br>` +
+                            `Nível: ${valueAtReference.toFixed(2)}m<br>` +
+                            "<extra></extra>"
                     });
                 }
             }
         }
     }
-    
+
     const layout = {
         xaxis: {
             title: "Data (Dia-Mês)",
@@ -391,12 +391,12 @@ function createYearlyChart(data) {
             borderwidth: 1
         }] : []
     };
-    
+
     const config = {
         responsive: true,
         displayModeBar: false
     };
-    
+
     Plotly.newPlot("yearlyChart", traces, layout, config);
 }
 
@@ -405,14 +405,14 @@ function createDailyChart(data) {
     // Remover outliers
     const dataNoOutliers = removeOutliersIQR(data);
     console.log(`Dados após remoção de outliers: ${dataNoOutliers.length} de ${data.length} registros`);
-    
+
     // Calcular médias móveis
     const ma6m = calculateMovingAverage(dataNoOutliers.map(d => d.level), 182);
     const ma1y = calculateMovingAverage(dataNoOutliers.map(d => d.level), 365);
     const ma2y = calculateMovingAverage(dataNoOutliers.map(d => d.level), 730);
-    
+
     const dates = dataNoOutliers.map(d => d.date);
-    
+
     const traces = [
         {
             x: dates,
@@ -447,7 +447,7 @@ function createDailyChart(data) {
             line: { color: colors.daily.ma2y, width: 2, dash: "dot" }
         }
     ];
-    
+
     const layout = {
         xaxis: {
             title: "Data",
@@ -459,25 +459,95 @@ function createDailyChart(data) {
         },
         ...getResponsiveLayout()
     };
-    
+
     const config = {
         responsive: true,
         displayModeBar: false
     };
-    
+
     Plotly.newPlot("dailyChart", traces, layout, config);
 }
 
 // Função para exportar dados (útil para desenvolvimento)
 function exportData() {
     const dataStr = JSON.stringify(allData, null, 2);
-    const dataBlob = new Blob([dataStr], {type: "application/json"});
+    const dataBlob = new Blob([dataStr], { type: "application/json" });
     const url = URL.createObjectURL(dataBlob);
     const link = document.createElement("a");
     link.href = url;
     link.download = "rio-negro-data.json";
     link.click();
 }
+
+document.getElementById("subscribeBtn").addEventListener("click", async function () {
+    const emailInput = document.getElementById("newsletterEmail");
+    const feedback = document.getElementById("newsletterFeedback");
+    const subscribeBtn = document.getElementById("subscribeBtn");
+    const email = emailInput.value.trim();
+
+    if (!email || !email.includes("@")) {
+        feedback.textContent = "❌ Por favor, insira um e-mail válido.";
+        feedback.style.color = "red";
+        return;
+    }
+
+    const originalText = subscribeBtn.textContent;
+    const originalBgColor = subscribeBtn.style.backgroundColor;
+
+    subscribeBtn.disabled = true;
+    subscribeBtn.textContent = "Enviando...";
+    subscribeBtn.style.cursor = "not-allowed";
+
+    try {
+        // Passo 1: Buscar assinatura segura da Function pública
+        const assinaturaResponse = await fetch("https://emailsave-func-dev.azurewebsites.net/api/AssinaturaHash?code=OseROS5qVVEoKirv3elXJ4mk5niiTrjHR0Yr0IN3nRfNAzFurjg3xw==", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ email })
+        });
+        const assinaturaData = await assinaturaResponse.json();
+
+        if (!assinaturaResponse.ok) {
+            throw new Error(assinaturaData.message || "Erro ao gerar assinatura");
+        }
+
+        const { email: signedEmail, timestamp, signature } = assinaturaData;
+
+        // Passo 2: Enviar para a Function protegida com hash
+        const response = await fetch("https://emailsave-func-dev.azurewebsites.net/api/saveEmails?code=OseROS5qVVEoKirv3elXJ4mk5niiTrjHR0Yr0IN3nRfNAzFurjg3xw==", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                email: signedEmail,
+                timestamp,
+                signature
+            })
+        });
+
+        const responseBody = await response.json().catch(() => ({}));
+        if (!response.ok) {
+            const errorMessage = responseBody.message || response.statusText || "Erro ao enviar";
+            throw new Error(errorMessage);
+        }
+
+        feedback.textContent = "✅ Inscrição realizada com sucesso!";
+        feedback.style.color = "green";
+        emailInput.value = "";
+    } catch (error) {
+        console.error("Erro ao assinar newsletter:", error);
+        feedback.textContent = `❌ ${error.message}`;
+        feedback.style.color = "red";
+    } finally {
+        subscribeBtn.disabled = false;
+        subscribeBtn.textContent = originalText;
+        subscribeBtn.style.backgroundColor = originalBgColor;
+        subscribeBtn.style.cursor = "pointer";
+    }
+});
 
 // Disponibilizar funções globalmente para debug
 window.riverApp = {
