@@ -492,59 +492,29 @@ document.getElementById("subscribeBtn").addEventListener("click", async function
     }
 
     const originalText = subscribeBtn.textContent;
-    const originalBgColor = subscribeBtn.style.backgroundColor;
-
     subscribeBtn.disabled = true;
     subscribeBtn.textContent = "Enviando...";
     subscribeBtn.style.cursor = "not-allowed";
 
     try {
-        // Passo 1: Buscar assinatura segura da Function pública
-        const assinaturaResponse = await fetch("https://emailsave-func-dev.azurewebsites.net/api/AssinaturaHash?code=OseROS5qVVEoKirv3elXJ4mk5niiTrjHR0Yr0IN3nRfNAzFurjg3xw==", {
+        const response = await fetch("https://emailsave-func-dev.azurewebsites.net/api/enviarNewsletter", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email })
         });
-        const assinaturaData = await assinaturaResponse.json();
 
-        if (!assinaturaResponse.ok) {
-            throw new Error(assinaturaData.message || "Erro ao gerar assinatura");
-        }
-
-        const { email: signedEmail, timestamp, signature } = assinaturaData;
-
-        // Passo 2: Enviar para a Function protegida com hash
-        const response = await fetch("https://emailsave-func-dev.azurewebsites.net/api/saveEmails?code=OseROS5qVVEoKirv3elXJ4mk5niiTrjHR0Yr0IN3nRfNAzFurjg3xw==", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                email: signedEmail,
-                timestamp,
-                signature
-            })
-        });
-
-        const responseBody = await response.json().catch(() => ({}));
-        if (!response.ok) {
-            const errorMessage = responseBody.message || response.statusText || "Erro ao enviar";
-            throw new Error(errorMessage);
-        }
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.message || "Erro ao enviar");
 
         feedback.textContent = "✅ Inscrição realizada com sucesso!";
         feedback.style.color = "green";
         emailInput.value = "";
     } catch (error) {
-        console.error("Erro ao assinar newsletter:", error);
         feedback.textContent = `❌ ${error.message}`;
         feedback.style.color = "red";
     } finally {
         subscribeBtn.disabled = false;
         subscribeBtn.textContent = originalText;
-        subscribeBtn.style.backgroundColor = originalBgColor;
         subscribeBtn.style.cursor = "pointer";
     }
 });
@@ -555,3 +525,4 @@ window.riverApp = {
     riverData: () => allData,
     removeOutliers: () => removeOutliersIQR(allData)
 };
+
