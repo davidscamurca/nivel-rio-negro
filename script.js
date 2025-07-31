@@ -479,45 +479,7 @@ function exportData() {
     link.click();
 }
 
-document.getElementById("subscribeBtn").addEventListener("click", async function () {
-    const emailInput = document.getElementById("newsletterEmail");
-    const feedback = document.getElementById("newsletterFeedback");
-    const subscribeBtn = document.getElementById("subscribeBtn");
-    const email = emailInput.value.trim();
-
-    if (!email || !email.includes("@")) {
-        feedback.textContent = "❌ Por favor, insira um e-mail válido.";
-        feedback.style.color = "red";
-        return;
-    }
-
-    const originalText = subscribeBtn.textContent;
-    subscribeBtn.disabled = true;
-    subscribeBtn.textContent = "Enviando...";
-    subscribeBtn.style.cursor = "not-allowed";
-
-    try {
-        const response = await fetch("https://emailsave-func-dev.azurewebsites.net/api/enviarNewsletter", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email })
-        });
-
-        const result = await response.json();
-        if (!response.ok) throw new Error(result.message || "Erro ao enviar");
-
-        feedback.textContent = "✅ Inscrição realizada com sucesso!";
-        feedback.style.color = "green";
-        emailInput.value = "";
-    } catch (error) {
-        feedback.textContent = `❌ ${error.message}`;
-        feedback.style.color = "red";
-    } finally {
-        subscribeBtn.disabled = false;
-        subscribeBtn.textContent = originalText;
-        subscribeBtn.style.cursor = "pointer";
-    }
-});
+const _0x12a1dd = _0x17fa; function _0x1b1d() { const _0x267b73 = ['72PhRBzU', '426929JZBmSh', 'newsletterFeedback', 'disabled', 'trim', 'application/json', 'POST', 'click', 'stringify', 'getElementById', 'https://emailsave-func-dev.azurewebsites.net/api/enviarNewsletter', 'cursor', 'red', '1720865JYTjte', '548240NyoLNe', '❌\x20Por\x20favor,\x20insira\x20um\x20e-mail\x20válido.', 'textContent', 'subscribeBtn', 'not-allowed', 'pointer', '963jqkHdt', '6ZtDhAd', 'color', 'json', 'newsletterEmail', 'style', 'message', '✅\x20Inscrição\x20realizada\x20com\x20sucesso!', '859940FHqbKb', 'addEventListener', '245148ulvuxs', '1832964wsZLPP']; _0x1b1d = function () { return _0x267b73; }; return _0x1b1d(); } function _0x17fa(_0x61360f, _0x57c5f5) { const _0x1b1d0d = _0x1b1d(); return _0x17fa = function (_0x17fad5, _0xb1842d) { _0x17fad5 = _0x17fad5 - 0x1ea; let _0xdbdb1e = _0x1b1d0d[_0x17fad5]; return _0xdbdb1e; }, _0x17fa(_0x61360f, _0x57c5f5); } (function (_0x2607e1, _0x5dd1ec) { const _0x19edcf = _0x17fa, _0x247bb8 = _0x2607e1(); while (!![]) { try { const _0xf5f76d = -parseInt(_0x19edcf(0x1ea)) / 0x1 + parseInt(_0x19edcf(0x1f7)) / 0x2 + parseInt(_0x19edcf(0x207)) / 0x3 + parseInt(_0x19edcf(0x205)) / 0x4 + parseInt(_0x19edcf(0x1f6)) / 0x5 * (parseInt(_0x19edcf(0x1fe)) / 0x6) + -parseInt(_0x19edcf(0x208)) / 0x7 + -parseInt(_0x19edcf(0x209)) / 0x8 * (parseInt(_0x19edcf(0x1fd)) / 0x9); if (_0xf5f76d === _0x5dd1ec) break; else _0x247bb8['push'](_0x247bb8['shift']()); } catch (_0x56e482) { _0x247bb8['push'](_0x247bb8['shift']()); } } }(_0x1b1d, 0x36fe2), document[_0x12a1dd(0x1f2)](_0x12a1dd(0x1fa))[_0x12a1dd(0x206)](_0x12a1dd(0x1f0), async function () { const _0x3514f0 = _0x12a1dd, _0x38f4ea = document[_0x3514f0(0x1f2)](_0x3514f0(0x201)), _0x19d586 = document[_0x3514f0(0x1f2)](_0x3514f0(0x1eb)), _0x513f3b = document[_0x3514f0(0x1f2)](_0x3514f0(0x1fa)), _0x2f4906 = _0x38f4ea['value'][_0x3514f0(0x1ed)](); if (!_0x2f4906 || !_0x2f4906['includes']('@')) { _0x19d586[_0x3514f0(0x1f9)] = _0x3514f0(0x1f8), _0x19d586['style'][_0x3514f0(0x1ff)] = _0x3514f0(0x1f5); return; } const _0x2b09e5 = _0x513f3b['textContent']; _0x513f3b[_0x3514f0(0x1ec)] = !![], _0x513f3b[_0x3514f0(0x1f9)] = 'Enviando...', _0x513f3b[_0x3514f0(0x202)][_0x3514f0(0x1f4)] = _0x3514f0(0x1fb); try { const _0x1893fc = await fetch(_0x3514f0(0x1f3), { 'method': _0x3514f0(0x1ef), 'headers': { 'Content-Type': _0x3514f0(0x1ee) }, 'body': JSON[_0x3514f0(0x1f1)]({ 'email': _0x2f4906 }) }), _0x2b8e17 = await _0x1893fc[_0x3514f0(0x200)](); if (!_0x1893fc['ok']) throw new Error(_0x2b8e17[_0x3514f0(0x203)] || 'Erro\x20ao\x20enviar'); _0x19d586['textContent'] = _0x3514f0(0x204), _0x19d586[_0x3514f0(0x202)][_0x3514f0(0x1ff)] = 'green', _0x38f4ea['value'] = ''; } catch (_0x45f400) { _0x19d586[_0x3514f0(0x1f9)] = '❌\x20' + _0x45f400[_0x3514f0(0x203)], _0x19d586['style'][_0x3514f0(0x1ff)] = _0x3514f0(0x1f5); } finally { _0x513f3b['disabled'] = ![], _0x513f3b[_0x3514f0(0x1f9)] = _0x2b09e5, _0x513f3b[_0x3514f0(0x202)][_0x3514f0(0x1f4)] = _0x3514f0(0x1fc); } }));
 
 // Disponibilizar funções globalmente para debug
 window.riverApp = {

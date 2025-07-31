@@ -24,14 +24,13 @@
         content="geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), speaker=(), vibrate=(), fullscreen=(self)">
 
     <!-- Content Security Policy - Compatível com Plotly.js -->
-    <meta http-equiv="Content-Security-Policy"
-    content="
+    <meta http-equiv="Content-Security-Policy" content="
         default-src 'self';
         script-src 'self' 'unsafe-inline' 'unsafe-eval';
         style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
         font-src 'self' https://fonts.gstatic.com;
         img-src 'self' data: blob:;
-        connect-src 'self' http://localhost:7071 https://emailsave-func-dev.azurewebsites.net;
+        connect-src 'self' https://emailsave-func-dev.azurewebsites.net;
         object-src 'none';
         base-uri 'self';
         form-action 'self';
@@ -99,10 +98,10 @@
             <section class="newsletter-section newsletter-section-narrow">
                 <div class="newsletter-container">
                     <div class="newsletter-content">
-                        <h2 class="newsletter-title">📧 Newsletter Diária - Já Disponível</h2>
+                        <h2 class="newsletter-title">📧 Newsletter Semanal</h2>
                         <p class="newsletter-description">
                             Agora você pode se cadastrar para receber relatórios diários com gráficos e estatísticas do
-                            nível do Rio Negro diretamente no seu email.
+                            nível do Rio Negro semanalmente no seu email.
                         </p>
                         <div class="newsletter-form-enabled">
                             <div class="newsletter-input-group">
@@ -113,9 +112,6 @@
                         </div>
                         <!-- Mensagem de sucesso ou erro -->
                         <p id="newsletterFeedback" style="margin-top: 10px; font-weight: bold;"></p>
-                        <p class="newsletter-note">
-                            ✅ Funcionalidade disponível • Gratuita • Dados atualizados diariamente
-                        </p>
                     </div>
                 </div>
             </section>
