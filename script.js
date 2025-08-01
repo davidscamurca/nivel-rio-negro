@@ -43,10 +43,10 @@ function removeOutliersIQR(data, key = "level") {
 
 // Gera labels de dia-mês (igual ao Python)
 function generateDayMonthLabels() {
-    const monthAbbr = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
+    const monthAbbr = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
     const daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]; // Usando 28 dias para fevereiro
     const labels = [];
-    
+
     for (let m = 0; m < 12; m++) {
         for (let d = 1; d <= daysInMonth[m]; d++) {
             labels.push(`${String(d).padStart(2, "0")}-${monthAbbr[m]}`);
@@ -57,21 +57,21 @@ function generateDayMonthLabels() {
 
 // Deduplica dados por dia-mês (mantém o último registro, igual ao Python)
 function deduplicateByDayMonth(data) {
-    const monthAbbr = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
+    const monthAbbr = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
     const map = new Map();
-    
+
     data.forEach(d => {
         const dayMonth = `${String(d.date.getDate()).padStart(2, "0")}-${monthAbbr[d.date.getMonth()]}`;
         map.set(dayMonth, d.level); // sobrescreve, mantendo o último
     });
-    
+
     return map;
 }
 
 // Função para obter configurações responsivas do layout
 function getResponsiveLayout() {
     const width = window.innerWidth;
-    
+
     if (width <= 480) {
         // Mobile
         return {
@@ -129,12 +129,12 @@ function getResponsiveLayout() {
 // Função para redimensionar os gráficos
 function resizeCharts() {
     const responsiveLayout = getResponsiveLayout();
-    
+
     // Redimensionar gráfico anual
     if (document.getElementById("yearlyChart")) {
         Plotly.relayout("yearlyChart", responsiveLayout);
     }
-    
+
     // Redimensionar gráfico diário
     if (document.getElementById("dailyChart")) {
         Plotly.relayout("dailyChart", responsiveLayout);
@@ -142,12 +142,12 @@ function resizeCharts() {
 }
 
 // Inicialização quando a página carrega
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     initializeApp();
-    
+
     // Adicionar listener de resize com debounce
     let resizeTimeout;
-    window.addEventListener("resize", function() {
+    window.addEventListener("resize", function () {
         clearTimeout(resizeTimeout);
         resizeTimeout = setTimeout(resizeCharts, 250);
     });
@@ -201,7 +201,7 @@ async function loadData() {
 // Função para atualizar a interface
 function updateUI() {
     console.log("Atualizando interface...");
-    
+
     // Atualizar estatísticas (sem outliers para consistência)
     const dataNoOutliers = removeOutliersIQR(allData);
     const stats = getStatistics(dataNoOutliers);
@@ -216,29 +216,29 @@ function updateUI() {
 function updateStatistics(stats) {
     // Nível atual
     document.getElementById("current-level").textContent = `${stats.current.toFixed(2)}m`;
-    document.getElementById("current-date").textContent = stats.currentDate ? 
+    document.getElementById("current-date").textContent = stats.currentDate ?
         stats.currentDate.toLocaleDateString("pt-BR") : "--";
-    
+
     // Máximo histórico
     document.getElementById("max-level").textContent = `${stats.max.toFixed(2)}m`;
-    document.getElementById("max-date").textContent = stats.maxDate ? 
+    document.getElementById("max-date").textContent = stats.maxDate ?
         stats.maxDate.toLocaleDateString("pt-BR") : "--";
-    
+
     // Mínimo histórico
     document.getElementById("min-level").textContent = `${stats.min.toFixed(2)}m`;
-    document.getElementById("min-date").textContent = stats.minDate ? 
+    document.getElementById("min-date").textContent = stats.minDate ?
         stats.minDate.toLocaleDateString("pt-BR") : "--";
-    
+
     // Variação 7 dias
     document.getElementById("variation-7d").textContent = stats.variation7dInfo;
     const variationColor = stats.variation7d > 0 ? "#10b981" : stats.variation7d < 0 ? "#ef4444" : "#6b7280";
     document.getElementById("variation-7d").style.color = variationColor;
     document.getElementById("variation-info").textContent = "últimos 7 dias";
-    
+
     // Situação do rio
     document.getElementById("river-status").textContent = stats.riverStatus;
-    const statusColor = stats.riverStatus === "Enchendo" ? "#10b981" : 
-                       stats.riverStatus === "Vazando" ? "#ef4444" : "#6b7280";
+    const statusColor = stats.riverStatus === "Enchendo" ? "#10b981" :
+        stats.riverStatus === "Vazando" ? "#ef4444" : "#6b7280";
     document.getElementById("river-status").style.color = statusColor;
     document.getElementById("status-info").textContent = stats.statusInfo;
 }
@@ -248,29 +248,29 @@ function createYearlyChart(data) {
     const dayMonthLabels = generateDayMonthLabels();
     const currentYear = new Date().getFullYear();
     const traces = [];
-    
+
     // Encontrar o último dia disponível no ano mais atual dos dados
     const yearsWithData = [...new Set(data.map(d => d.date.getFullYear()))].sort((a, b) => b - a);
     const mostRecentYear = yearsWithData[0];
     const mostRecentYearData = data.filter(d => d.date.getFullYear() === mostRecentYear);
-    
+
     console.log("DEBUG - Anos com dados:", yearsWithData);
     console.log("DEBUG - Ano mais recente:", mostRecentYear);
     console.log("DEBUG - Dados do ano mais recente:", mostRecentYearData.length, "registros");
-    
+
     let referenceDayMonth = null;
     let referenceIndex = null;
-    
+
     if (mostRecentYearData.length > 0) {
         const lastDate = mostRecentYearData[mostRecentYearData.length - 1].date;
-        const monthAbbr = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
+        const monthAbbr = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
         referenceDayMonth = `${String(lastDate.getDate()).padStart(2, "0")}-${monthAbbr[lastDate.getMonth()]}`;
         referenceIndex = dayMonthLabels.indexOf(referenceDayMonth);
         console.log(`DEBUG - Último dia disponível (${mostRecentYear}): ${referenceDayMonth} (índice: ${referenceIndex})`);
         console.log(`DEBUG - Data de referência: ${lastDate.toLocaleDateString("pt-BR")}`);
         console.log(`DEBUG - Data completa: ${lastDate.toISOString()}`);
     }
-    
+
     // Processar dados para cada ano
     for (let year = 2019; year <= 2025; year++) {
         const yearData = data.filter(d => d.date.getFullYear() === year);
@@ -278,7 +278,7 @@ function createYearlyChart(data) {
             // Deduplica por dia-mês
             const dayMonthMap = deduplicateByDayMonth(yearData);
             const yValues = dayMonthLabels.map(label => dayMonthMap.get(label) || null);
-            
+
             // Estilo da linha baseado no ano
             let lineWidth;
             if (year == currentYear) {
@@ -288,7 +288,7 @@ function createYearlyChart(data) {
             } else {
                 lineWidth = 1.5;
             }
-            
+
             traces.push({
                 x: dayMonthLabels,
                 y: yValues,
@@ -303,7 +303,7 @@ function createYearlyChart(data) {
             });
         }
     }
-    
+
     // Adicionar linha vertical no dia de referência (último dia disponível)
     if (referenceDayMonth && referenceIndex !== -1) {
         traces.push({
@@ -320,14 +320,14 @@ function createYearlyChart(data) {
             showlegend: true,
             hoverinfo: "skip"
         });
-        
+
         // Adicionar pontos destacados no dia de referência para cada ano
         for (let year = 2019; year <= 2025; year++) {
             const yearData = data.filter(d => d.date.getFullYear() === year);
             if (yearData.length > 0) {
                 const dayMonthMap = deduplicateByDayMonth(yearData);
                 const valueAtReference = dayMonthMap.get(referenceDayMonth);
-                
+
                 if (valueAtReference !== undefined && valueAtReference !== null) {
                     traces.push({
                         x: [referenceDayMonth],
@@ -346,15 +346,15 @@ function createYearlyChart(data) {
                         },
                         showlegend: false,
                         hovertemplate: `<b>Nível ${year}</b><br>` +
-                                     `Data: ${referenceDayMonth}<br>` +
-                                     `Nível: ${valueAtReference.toFixed(2)}m<br>` +
-                                     "<extra></extra>"
+                            `Data: ${referenceDayMonth}<br>` +
+                            `Nível: ${valueAtReference.toFixed(2)}m<br>` +
+                            "<extra></extra>"
                     });
                 }
             }
         }
     }
-    
+
     const layout = {
         xaxis: {
             title: "Data (Dia-Mês)",
@@ -391,12 +391,12 @@ function createYearlyChart(data) {
             borderwidth: 1
         }] : []
     };
-    
+
     const config = {
         responsive: true,
         displayModeBar: false
     };
-    
+
     Plotly.newPlot("yearlyChart", traces, layout, config);
 }
 
@@ -405,14 +405,14 @@ function createDailyChart(data) {
     // Remover outliers
     const dataNoOutliers = removeOutliersIQR(data);
     console.log(`Dados após remoção de outliers: ${dataNoOutliers.length} de ${data.length} registros`);
-    
+
     // Calcular médias móveis
     const ma6m = calculateMovingAverage(dataNoOutliers.map(d => d.level), 182);
     const ma1y = calculateMovingAverage(dataNoOutliers.map(d => d.level), 365);
     const ma2y = calculateMovingAverage(dataNoOutliers.map(d => d.level), 730);
-    
+
     const dates = dataNoOutliers.map(d => d.date);
-    
+
     const traces = [
         {
             x: dates,
@@ -447,7 +447,7 @@ function createDailyChart(data) {
             line: { color: colors.daily.ma2y, width: 2, dash: "dot" }
         }
     ];
-    
+
     const layout = {
         xaxis: {
             title: "Data",
@@ -459,19 +459,19 @@ function createDailyChart(data) {
         },
         ...getResponsiveLayout()
     };
-    
+
     const config = {
         responsive: true,
         displayModeBar: false
     };
-    
+
     Plotly.newPlot("dailyChart", traces, layout, config);
 }
 
 // Função para exportar dados (útil para desenvolvimento)
 function exportData() {
     const dataStr = JSON.stringify(allData, null, 2);
-    const dataBlob = new Blob([dataStr], {type: "application/json"});
+    const dataBlob = new Blob([dataStr], { type: "application/json" });
     const url = URL.createObjectURL(dataBlob);
     const link = document.createElement("a");
     link.href = url;
@@ -479,9 +479,12 @@ function exportData() {
     link.click();
 }
 
+const _0x12a1dd = _0x17fa; function _0x1b1d() { const _0x267b73 = ['72PhRBzU', '426929JZBmSh', 'newsletterFeedback', 'disabled', 'trim', 'application/json', 'POST', 'click', 'stringify', 'getElementById', 'https://emailsave-func-dev.azurewebsites.net/api/enviarNewsletter', 'cursor', 'red', '1720865JYTjte', '548240NyoLNe', '❌\x20Por\x20favor,\x20insira\x20um\x20e-mail\x20válido.', 'textContent', 'subscribeBtn', 'not-allowed', 'pointer', '963jqkHdt', '6ZtDhAd', 'color', 'json', 'newsletterEmail', 'style', 'message', '✅\x20Inscrição\x20realizada\x20com\x20sucesso!', '859940FHqbKb', 'addEventListener', '245148ulvuxs', '1832964wsZLPP']; _0x1b1d = function () { return _0x267b73; }; return _0x1b1d(); } function _0x17fa(_0x61360f, _0x57c5f5) { const _0x1b1d0d = _0x1b1d(); return _0x17fa = function (_0x17fad5, _0xb1842d) { _0x17fad5 = _0x17fad5 - 0x1ea; let _0xdbdb1e = _0x1b1d0d[_0x17fad5]; return _0xdbdb1e; }, _0x17fa(_0x61360f, _0x57c5f5); } (function (_0x2607e1, _0x5dd1ec) { const _0x19edcf = _0x17fa, _0x247bb8 = _0x2607e1(); while (!![]) { try { const _0xf5f76d = -parseInt(_0x19edcf(0x1ea)) / 0x1 + parseInt(_0x19edcf(0x1f7)) / 0x2 + parseInt(_0x19edcf(0x207)) / 0x3 + parseInt(_0x19edcf(0x205)) / 0x4 + parseInt(_0x19edcf(0x1f6)) / 0x5 * (parseInt(_0x19edcf(0x1fe)) / 0x6) + -parseInt(_0x19edcf(0x208)) / 0x7 + -parseInt(_0x19edcf(0x209)) / 0x8 * (parseInt(_0x19edcf(0x1fd)) / 0x9); if (_0xf5f76d === _0x5dd1ec) break; else _0x247bb8['push'](_0x247bb8['shift']()); } catch (_0x56e482) { _0x247bb8['push'](_0x247bb8['shift']()); } } }(_0x1b1d, 0x36fe2), document[_0x12a1dd(0x1f2)](_0x12a1dd(0x1fa))[_0x12a1dd(0x206)](_0x12a1dd(0x1f0), async function () { const _0x3514f0 = _0x12a1dd, _0x38f4ea = document[_0x3514f0(0x1f2)](_0x3514f0(0x201)), _0x19d586 = document[_0x3514f0(0x1f2)](_0x3514f0(0x1eb)), _0x513f3b = document[_0x3514f0(0x1f2)](_0x3514f0(0x1fa)), _0x2f4906 = _0x38f4ea['value'][_0x3514f0(0x1ed)](); if (!_0x2f4906 || !_0x2f4906['includes']('@')) { _0x19d586[_0x3514f0(0x1f9)] = _0x3514f0(0x1f8), _0x19d586['style'][_0x3514f0(0x1ff)] = _0x3514f0(0x1f5); return; } const _0x2b09e5 = _0x513f3b['textContent']; _0x513f3b[_0x3514f0(0x1ec)] = !![], _0x513f3b[_0x3514f0(0x1f9)] = 'Enviando...', _0x513f3b[_0x3514f0(0x202)][_0x3514f0(0x1f4)] = _0x3514f0(0x1fb); try { const _0x1893fc = await fetch(_0x3514f0(0x1f3), { 'method': _0x3514f0(0x1ef), 'headers': { 'Content-Type': _0x3514f0(0x1ee) }, 'body': JSON[_0x3514f0(0x1f1)]({ 'email': _0x2f4906 }) }), _0x2b8e17 = await _0x1893fc[_0x3514f0(0x200)](); if (!_0x1893fc['ok']) throw new Error(_0x2b8e17[_0x3514f0(0x203)] || 'Erro\x20ao\x20enviar'); _0x19d586['textContent'] = _0x3514f0(0x204), _0x19d586[_0x3514f0(0x202)][_0x3514f0(0x1ff)] = 'green', _0x38f4ea['value'] = ''; } catch (_0x45f400) { _0x19d586[_0x3514f0(0x1f9)] = '❌\x20' + _0x45f400[_0x3514f0(0x203)], _0x19d586['style'][_0x3514f0(0x1ff)] = _0x3514f0(0x1f5); } finally { _0x513f3b['disabled'] = ![], _0x513f3b[_0x3514f0(0x1f9)] = _0x2b09e5, _0x513f3b[_0x3514f0(0x202)][_0x3514f0(0x1f4)] = _0x3514f0(0x1fc); } }));
+
 // Disponibilizar funções globalmente para debug
 window.riverApp = {
     exportData,
     riverData: () => allData,
     removeOutliers: () => removeOutliersIQR(allData)
 };
+
