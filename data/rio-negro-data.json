@@ -46603,5 +46603,120 @@
     "data": "2025-07-08",
     "nivel_rio": 29.05,
     "encheu_vazou": 0.0
+  },
+  {
+    "data": "2025-07-09",
+    "nivel_rio": 29.03,
+    "encheu_vazou": -2.0
+  },
+  {
+    "data": "2025-07-10",
+    "nivel_rio": 29.01,
+    "encheu_vazou": -2.0
+  },
+  {
+    "data": "2025-07-11",
+    "nivel_rio": 28.99,
+    "encheu_vazou": -2.0
+  },
+  {
+    "data": "2025-07-12",
+    "nivel_rio": 28.97,
+    "encheu_vazou": -2.0
+  },
+  {
+    "data": "2025-07-13",
+    "nivel_rio": 28.96,
+    "encheu_vazou": -1.0
+  },
+  {
+    "data": "2025-07-14",
+    "nivel_rio": 28.95,
+    "encheu_vazou": -1.0
+  },
+  {
+    "data": "2025-07-15",
+    "nivel_rio": 28.93,
+    "encheu_vazou": -2.0
+  },
+  {
+    "data": "2025-07-16",
+    "nivel_rio": 28.91,
+    "encheu_vazou": -2.0
+  },
+  {
+    "data": "2025-07-17",
+    "nivel_rio": 28.89,
+    "encheu_vazou": -2.0
+  },
+  {
+    "data": "2025-07-18",
+    "nivel_rio": 28.87,
+    "encheu_vazou": -2.0
+  },
+  {
+    "data": "2025-07-19",
+    "nivel_rio": 28.85,
+    "encheu_vazou": -2.0
+  },
+  {
+    "data": "2025-07-20",
+    "nivel_rio": 28.82,
+    "encheu_vazou": -3.0
+  },
+  {
+    "data": "2025-07-21",
+    "nivel_rio": 28.79,
+    "encheu_vazou": -3.0
+  },
+  {
+    "data": "2025-07-22",
+    "nivel_rio": 28.77,
+    "encheu_vazou": -2.0
+  },
+  {
+    "data": "2025-07-23",
+    "nivel_rio": 28.75,
+    "encheu_vazou": -2.0
+  },
+  {
+    "data": "2025-07-24",
+    "nivel_rio": 28.72,
+    "encheu_vazou": -3.0
+  },
+  {
+    "data": "2025-07-25",
+    "nivel_rio": 28.69,
+    "encheu_vazou": -3.0
+  },
+  {
+    "data": "2025-07-26",
+    "nivel_rio": 28.67,
+    "encheu_vazou": -2.0
+  },
+  {
+    "data": "2025-07-27",
+    "nivel_rio": 28.64,
+    "encheu_vazou": -3.0
+  },
+  {
+    "data": "2025-07-28",
+    "nivel_rio": 28.61,
+    "encheu_vazou": -3.0
+  },
+  {
+    "data": "2025-07-29",
+    "nivel_rio": 28.58,
+    "encheu_vazou": -3.0
+  },
+  {
+    "data": "2025-07-30",
+    "nivel_rio": 28.55,
+    "encheu_vazou": -3.0
+  },
+  {
+    "data": "2025-07-31",
+    "nivel_rio": 28.52,
+    "encheu_vazou": 3.0
   }
 ]
