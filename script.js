@@ -192,13 +192,6 @@ async function loadData() {
         console.log("Dados processados:", allData.length, "registros");
         console.log("Primeiro registro:", allData[0]);
         console.log("Último registro:", allData[allData.length - 1]);
-        
-        // Debug específico para verificar dados recentes
-        const recentData = allData.slice(-10);
-        console.log("Últimos 10 registros:");
-        recentData.forEach((record, i) => {
-            console.log(`${i + 1}: ${record.date.toLocaleDateString('pt-BR')} - ${record.level}m`);
-        });
     } catch (error) {
         console.error("Erro ao carregar dados:", error);
         throw error;
