@@ -94,11 +94,25 @@ body {
     min-height: 100vh;
 }
 
-/* Desabilitar scroll em mobile quando incorporado */
+/* Otimizar scroll para mobile quando incorporado */
 @media (max-width: 768px) {
     html, body {
+        overflow-x: hidden; /* Remove apenas scroll horizontal */
+        overflow-y: auto;   /* Mantém scroll vertical */
+        width: 100%;
+        max-width: 100vw;
+    }
+    
+    /* Evitar overflow horizontal em containers */
+    .container {
+        overflow-x: hidden;
+        max-width: 100%;
+    }
+    
+    /* Garantir que charts não causem overflow */
+    .chart-wrapper {
         overflow: hidden;
-        height: 100vh;
+        max-width: 100%;
     }
 }
 
