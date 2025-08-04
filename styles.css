@@ -94,6 +94,14 @@ body {
     min-height: 100vh;
 }
 
+/* Desabilitar scroll em mobile quando incorporado */
+@media (max-width: 768px) {
+    html, body {
+        overflow: hidden;
+        height: 100vh;
+    }
+}
+
 .container {
     max-width: 1400px;
     margin: 0 auto;
