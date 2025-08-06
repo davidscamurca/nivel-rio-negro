@@ -2,7 +2,7 @@
 import {
     calculateMovingAverage,
     getStatistics
-} from "./js/utils.js?v=1.0.1";
+} from "./js/utils.js?v=1.0.2";
 
 // Variáveis globais
 let allData = [];
