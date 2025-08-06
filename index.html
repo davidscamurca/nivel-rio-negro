@@ -11,7 +11,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
 
-    <link rel="stylesheet" href="styles.css?v=1.1.5">
+    <link rel="stylesheet" href="styles.css?v=1.1.9">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -81,6 +81,18 @@
                 </div>
             </section>
 
+            <!-- Newsletter sutil e compacto -->
+            <section class="newsletter-compact">
+                <div class="newsletter-compact-container">
+                    <span class="newsletter-compact-text">📧 Se inscreva para receber esses dados semanalmente</span>
+                    <div class="newsletter-compact-form">
+                        <input type="email" placeholder="Seu email" class="newsletter-compact-input" id="newsletterEmail">
+                        <button type="button" class="newsletter-compact-btn" id="subscribeBtn">Assinar</button>
+                    </div>
+                    <p id="newsletterFeedback" class="newsletter-compact-feedback"></p>
+                </div>
+            </section>
+
             <section class="chart-section chart-section-narrow">
                 <h2 class="chart-title">Comparação de níveis por ano (2019-2025)</h2>
                 <div class="chart-wrapper">
@@ -95,26 +107,7 @@
                 </div>
             </section>
 
-            <section class="newsletter-section newsletter-section-narrow">
-                <div class="newsletter-container">
-                    <div class="newsletter-content">
-                        <h2 class="newsletter-title">📧 Newsletter Semanal</h2>
-                        <p class="newsletter-description">
-                            Agora você pode se cadastrar para receber relatórios diários com gráficos e estatísticas do
-                            nível do Rio Negro semanalmente no seu email.
-                        </p>
-                        <div class="newsletter-form-enabled">
-                            <div class="newsletter-input-group">
-                                <input type="email" placeholder="Digite seu email" class="newsletter-input"
-                                    id="newsletterEmail">
-                                <button type="button" class="newsletter-btn" id="subscribeBtn">Assinar</button>
-                            </div>
-                        </div>
-                        <!-- Mensagem de sucesso ou erro -->
-                        <p id="newsletterFeedback" style="margin-top: 10px; font-weight: bold;"></p>
-                    </div>
-                </div>
-            </section>
+
         </div>
     </main>
 
