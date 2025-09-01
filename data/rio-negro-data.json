@@ -46863,5 +46863,20 @@
     "data": "2025-08-29",
     "nivel_rio": 26.95,
     "encheu_vazou": -8.0
+  },
+  {
+    "data": "2025-08-30",
+    "nivel_rio": 26.86,
+    "encheu_vazou": -9.0
+  },
+  {
+    "data": "2025-08-31",
+    "nivel_rio": 26.77,
+    "encheu_vazou": -9.0
+  },
+  {
+    "data": "2025-09-01",
+    "nivel_rio": 26.68,
+    "encheu_vazou": -9.0
   }
 ]
