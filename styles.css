@@ -118,6 +118,18 @@ body {
     text-align: center;
 }
 
+.subtitle {
+    font-size: var(--font-size-base);
+    font-weight: 400;
+    color: var(--gray-600);
+    text-align: center;
+    margin-top: var(--spacing-4);
+    line-height: 1.6;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 /* Stats section */
 .stats-section {
     margin-bottom: var(--spacing-8);
@@ -252,8 +264,21 @@ body {
     font-size: var(--font-size-xl);
     font-weight: 600;
     color: var(--gray-800);
-    margin-bottom: var(--spacing-6);
+    margin-bottom: var(--spacing-4);
     text-align: center;
+}
+
+.chart-description {
+    font-size: var(--font-size-sm);
+    font-weight: 400;
+    color: var(--gray-600);
+    text-align: center;
+    margin-bottom: var(--spacing-6);
+    line-height: 1.6;
+    max-width: 910px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 var(--spacing-6);
 }
 
 .chart-wrapper {
