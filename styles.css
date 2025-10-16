@@ -106,8 +106,8 @@ body {
 .header {
     background: transparent;
     color: var(--primary);
-    padding: var(--spacing-8) 0;
-    margin-bottom: var(--spacing-8);
+    padding: var(--spacing-6) 0;
+    margin-bottom: var(--spacing-4);
 }
 
 .title {
@@ -146,11 +146,11 @@ body {
 .stat-card {
     background: var(--white);
     border-radius: var(--border-radius-lg);
-    padding: var(--spacing-5);
+    padding: var(--spacing-4);
     box-shadow: var(--shadow-md);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     text-align: center;
-    min-height: 140px;
+    min-height: 120px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -164,7 +164,7 @@ body {
 }
 
 .stat-value {
-    font-size: var(--font-size-4xl);
+    font-size: var(--font-size-3xl);
     font-weight: 700;
     color: var(--primary);
     margin-bottom: var(--spacing-2);
