@@ -7,6 +7,16 @@
     <title>Nível do Rio Negro Manaus</title>
     <meta name="description" content="Acompanhe o nível do Rio Negro em Manaus atualizado diariamente. Dados históricos desde 2000, gráficos de enchentes e secas do Rio Negro. Informações do Porto de Manaus.">
 
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5BE0WKMJLL"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-5BE0WKMJLL');
+    </script>
+
     <!-- Meta tags para controle de cache -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
@@ -24,14 +34,14 @@
     <meta http-equiv="Permissions-Policy"
         content="geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), speaker=(), vibrate=(), fullscreen=(self)">
 
-    <!-- Content Security Policy - Compatível com Plotly.js -->
+    <!-- Content Security Policy - Compatível com Plotly.js e Google Analytics -->
     <meta http-equiv="Content-Security-Policy" content="
         default-src 'self';
-        script-src 'self' 'unsafe-inline' 'unsafe-eval';
+        script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com;
         style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
         font-src 'self' https://fonts.gstatic.com;
-        img-src 'self' data: blob:;
-        connect-src 'self' https://emailsave-func-dev.azurewebsites.net;
+        img-src 'self' data: blob: https://www.google-analytics.com https://www.googletagmanager.com;
+        connect-src 'self' https://emailsave-func-dev.azurewebsites.net https://www.google-analytics.com https://analytics.google.com https://region1.google-analytics.com https://stats.g.doubleclick.net;
         object-src 'none';
         base-uri 'self';
         form-action 'self';
