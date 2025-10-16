@@ -155,7 +155,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Função para inicializar a aplicação
 async function initializeApp() {
-    console.log("Iniciando aplicação...");
     try {
         await loadData();
         updateUI();
@@ -167,7 +166,6 @@ async function initializeApp() {
 
 // Função para carregar os dados
 async function loadData() {
-    console.log("Carregando dados...");
     try {
         // Adiciona timestamp para evitar cache
         const timestamp = new Date().getTime();
@@ -176,7 +174,6 @@ async function loadData() {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const rawData = await response.json();
-        console.log("Dados brutos recebidos:", rawData.length, "registros");
 
         // Processar os dados
         allData = rawData.map(item => {
@@ -188,10 +185,6 @@ async function loadData() {
                 level: parseFloat(item.nivel_rio)
             };
         }).sort((a, b) => a.date - b.date);
-
-        console.log("Dados processados:", allData.length, "registros");
-        console.log("Primeiro registro:", allData[0]);
-        console.log("Último registro:", allData[allData.length - 1]);
     } catch (error) {
         console.error("Erro ao carregar dados:", error);
         throw error;
@@ -200,8 +193,6 @@ async function loadData() {
 
 // Função para atualizar a interface
 function updateUI() {
-    console.log("Atualizando interface...");
-
     // Atualizar estatísticas (sem outliers para consistência)
     const dataNoOutliers = removeOutliersIQR(allData);
     const stats = getStatistics(dataNoOutliers);
@@ -254,10 +245,6 @@ function createYearlyChart(data) {
     const mostRecentYear = yearsWithData[0];
     const mostRecentYearData = data.filter(d => d.date.getFullYear() === mostRecentYear);
 
-    console.log("DEBUG - Anos com dados:", yearsWithData);
-    console.log("DEBUG - Ano mais recente:", mostRecentYear);
-    console.log("DEBUG - Dados do ano mais recente:", mostRecentYearData.length, "registros");
-
     let referenceDayMonth = null;
     let referenceIndex = null;
 
@@ -266,9 +253,6 @@ function createYearlyChart(data) {
         const monthAbbr = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
         referenceDayMonth = `${String(lastDate.getDate()).padStart(2, "0")}-${monthAbbr[lastDate.getMonth()]}`;
         referenceIndex = dayMonthLabels.indexOf(referenceDayMonth);
-        console.log(`DEBUG - Último dia disponível (${mostRecentYear}): ${referenceDayMonth} (índice: ${referenceIndex})`);
-        console.log(`DEBUG - Data de referência: ${lastDate.toLocaleDateString("pt-BR")}`);
-        console.log(`DEBUG - Data completa: ${lastDate.toISOString()}`);
     }
 
     // Processar dados para cada ano
@@ -404,7 +388,6 @@ function createYearlyChart(data) {
 function createDailyChart(data) {
     // Remover outliers
     const dataNoOutliers = removeOutliersIQR(data);
-    console.log(`Dados após remoção de outliers: ${dataNoOutliers.length} de ${data.length} registros`);
 
     // Calcular médias móveis
     const ma6m = calculateMovingAverage(dataNoOutliers.map(d => d.level), 182);
