@@ -47283,5 +47283,20 @@
     "data": "2025-11-21",
     "nivel_rio": 19.21,
     "encheu_vazou": 4.0
+  },
+  {
+    "data": "2025-11-22",
+    "nivel_rio": 19.24,
+    "encheu_vazou": 3.0
+  },
+  {
+    "data": "2025-11-23",
+    "nivel_rio": 19.27,
+    "encheu_vazou": 3.0
+  },
+  {
+    "data": "2025-11-24",
+    "nivel_rio": 19.3,
+    "encheu_vazou": 3.0
   }
 ]
