@@ -198,6 +198,8 @@ function updateUI() {
     const stats = getStatistics(dataNoOutliers);
     updateStatistics(stats);
 
+    updateYearRangeTitle(allData, 2019)
+
     // Atualizar gráficos
     createYearlyChart(allData); // Gráfico anual não remove outliers
     createDailyChart(allData);  // Gráfico de médias móveis remove outliers internamente
@@ -234,11 +236,38 @@ function updateStatistics(stats) {
     document.getElementById("status-info").textContent = stats.statusInfo;
 }
 
+// === (NOVO) Cores fallback para anos que não existirem em colors.yearly ===
+const DEFAULT_YEAR_PALETTE = [
+  "#1f77b4", "#ff7f0e", "#2ca02c", "#d62728",
+  "#9467bd", "#8c564b", "#e377c2", "#7f7f7f",
+  "#bcbd22", "#17becf"
+];
+
+function getYearColor(year, yearsOrdered) {
+  // usa sua cor fixa se existir
+  if (colors.yearly && colors.yearly[year]) return colors.yearly[year];
+
+  // fallback pela posição do ano
+  const idx = yearsOrdered.indexOf(year);
+  return DEFAULT_YEAR_PALETTE[(idx >= 0 ? idx : 0) % DEFAULT_YEAR_PALETTE.length];
+}
+
+function updateYearRangeTitle(data, startYear = 2019) {
+  const el = document.getElementById("year-range");
+  if (!el) return;
+
+  const years = [...new Set(data.map(d => d.date.getFullYear()))].sort((a, b) => a - b);
+  const endYear = years.length ? years[years.length - 1] : new Date().getFullYear();
+
+  el.textContent = `${startYear}–${endYear}`;
+}
+
 // Função para criar o gráfico anual com Plotly (MUITO mais simples!)
 function createYearlyChart(data) {
     const dayMonthLabels = generateDayMonthLabels();
     const currentYear = new Date().getFullYear();
     const traces = [];
+    const years = [...new Set(data.map(d => d.date.getFullYear()))].sort((a, b) => a - b);
 
     // Encontrar o último dia disponível no ano mais atual dos dados
     const yearsWithData = [...new Set(data.map(d => d.date.getFullYear()))].sort((a, b) => b - a);
@@ -256,7 +285,7 @@ function createYearlyChart(data) {
     }
 
     // Processar dados para cada ano
-    for (let year = 2019; year <= 2025; year++) {
+    for (let year = 2019; year <= currentYear; year++) {
         const yearData = data.filter(d => d.date.getFullYear() === year);
         if (yearData.length > 0) {
             // Deduplica por dia-mês
@@ -329,9 +358,12 @@ function createYearlyChart(data) {
                             }
                         },
                         showlegend: false,
-                        hovertemplate: `<b>Nível ${year}</b><br>` +
-                            `Data: ${referenceDayMonth}<br>` +
-                            `Nível: ${valueAtReference.toFixed(2)}m<br>` +
+                        hovertemplate: `<b>Nível ${year}</b>
+` +
+                            `Data: ${referenceDayMonth}
+` +
+                            `Nível: ${valueAtReference.toFixed(2)}m
+` +
                             "<extra></extra>"
                     });
                 }
@@ -471,3 +503,4 @@ window.riverApp = {
     removeOutliers: () => removeOutliersIQR(allData)
 };
 
+ 
