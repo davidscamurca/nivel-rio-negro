@@ -47913,5 +47913,20 @@
     "data": "2026-03-27",
     "nivel_rio": 25.29,
     "encheu_vazou": 3.0
+  },
+  {
+    "data": "2026-03-28",
+    "nivel_rio": 25.34,
+    "encheu_vazou": 5.0
+  },
+  {
+    "data": "2026-03-29",
+    "nivel_rio": 25.38,
+    "encheu_vazou": 4.0
+  },
+  {
+    "data": "2026-03-30",
+    "nivel_rio": 25.42,
+    "encheu_vazou": 4.0
   }
 ]
