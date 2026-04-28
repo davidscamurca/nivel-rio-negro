@@ -48068,5 +48068,10 @@
     "data": "2026-04-27",
     "nivel_rio": 26.68,
     "encheu_vazou": 4.0
+  },
+  {
+    "data": "2026-04-28",
+    "nivel_rio": 26.71,
+    "encheu_vazou": 3.0
   }
 ]
