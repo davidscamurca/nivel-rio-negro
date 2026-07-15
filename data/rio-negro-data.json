@@ -48188,5 +48188,275 @@
     "data": "2026-05-21",
     "nivel_rio": 27.52,
     "encheu_vazou": 4.0
+  },
+  {
+    "data": "2026-05-22",
+    "nivel_rio": 27.56,
+    "encheu_vazou": 4.0
+  },
+  {
+    "data": "2026-05-23",
+    "nivel_rio": 27.6,
+    "encheu_vazou": 4.0
+  },
+  {
+    "data": "2026-05-24",
+    "nivel_rio": 27.64,
+    "encheu_vazou": 4.0
+  },
+  {
+    "data": "2026-05-25",
+    "nivel_rio": 27.68,
+    "encheu_vazou": 4.0
+  },
+  {
+    "data": "2026-05-26",
+    "nivel_rio": 27.7,
+    "encheu_vazou": 2.0
+  },
+  {
+    "data": "2026-05-27",
+    "nivel_rio": 27.73,
+    "encheu_vazou": 3.0
+  },
+  {
+    "data": "2026-05-28",
+    "nivel_rio": 27.77,
+    "encheu_vazou": 4.0
+  },
+  {
+    "data": "2026-05-29",
+    "nivel_rio": 27.8,
+    "encheu_vazou": 3.0
+  },
+  {
+    "data": "2026-05-30",
+    "nivel_rio": 27.85,
+    "encheu_vazou": 5.0
+  },
+  {
+    "data": "2026-05-31",
+    "nivel_rio": 27.9,
+    "encheu_vazou": 5.0
+  },
+  {
+    "data": "2026-06-01",
+    "nivel_rio": 27.95,
+    "encheu_vazou": 5.0
+  },
+  {
+    "data": "2026-06-02",
+    "nivel_rio": 27.99,
+    "encheu_vazou": 4.0
+  },
+  {
+    "data": "2026-06-03",
+    "nivel_rio": 28.02,
+    "encheu_vazou": 3.0
+  },
+  {
+    "data": "2026-06-04",
+    "nivel_rio": 28.05,
+    "encheu_vazou": 3.0
+  },
+  {
+    "data": "2026-06-05",
+    "nivel_rio": 28.08,
+    "encheu_vazou": 3.0
+  },
+  {
+    "data": "2026-06-06",
+    "nivel_rio": 28.12,
+    "encheu_vazou": 4.0
+  },
+  {
+    "data": "2026-06-07",
+    "nivel_rio": 28.16,
+    "encheu_vazou": 4.0
+  },
+  {
+    "data": "2026-06-08",
+    "nivel_rio": 28.2,
+    "encheu_vazou": 4.0
+  },
+  {
+    "data": "2026-06-09",
+    "nivel_rio": 28.26,
+    "encheu_vazou": 6.0
+  },
+  {
+    "data": "2026-06-10",
+    "nivel_rio": 28.3,
+    "encheu_vazou": 4.0
+  },
+  {
+    "data": "2026-06-11",
+    "nivel_rio": 28.34,
+    "encheu_vazou": 4.0
+  },
+  {
+    "data": "2026-06-12",
+    "nivel_rio": 28.36,
+    "encheu_vazou": 2.0
+  },
+  {
+    "data": "2026-06-13",
+    "nivel_rio": 28.38,
+    "encheu_vazou": 2.0
+  },
+  {
+    "data": "2026-06-14",
+    "nivel_rio": 28.4,
+    "encheu_vazou": 2.0
+  },
+  {
+    "data": "2026-06-15",
+    "nivel_rio": 28.43,
+    "encheu_vazou": 3.0
+  },
+  {
+    "data": "2026-06-16",
+    "nivel_rio": 28.45,
+    "encheu_vazou": 2.0
+  },
+  {
+    "data": "2026-06-17",
+    "nivel_rio": 28.46,
+    "encheu_vazou": 1.0
+  },
+  {
+    "data": "2026-06-19",
+    "nivel_rio": 28.48,
+    "encheu_vazou": 2.0
+  },
+  {
+    "data": "2026-06-20",
+    "nivel_rio": 28.5,
+    "encheu_vazou": 1.0
+  },
+  {
+    "data": "2026-06-21",
+    "nivel_rio": 28.51,
+    "encheu_vazou": 1.0
+  },
+  {
+    "data": "2026-06-22",
+    "nivel_rio": 28.51,
+    "encheu_vazou": 0.0
+  },
+  {
+    "data": "2026-06-23",
+    "nivel_rio": 28.51,
+    "encheu_vazou": 0.0
+  },
+  {
+    "data": "2026-06-24",
+    "nivel_rio": 28.51,
+    "encheu_vazou": 0.0
+  },
+  {
+    "data": "2026-06-25",
+    "nivel_rio": 28.51,
+    "encheu_vazou": 0.0
+  },
+  {
+    "data": "2026-06-26",
+    "nivel_rio": 28.51,
+    "encheu_vazou": 0.0
+  },
+  {
+    "data": "2026-06-27",
+    "nivel_rio": 28.51,
+    "encheu_vazou": 0.0
+  },
+  {
+    "data": "2026-06-28",
+    "nivel_rio": 28.51,
+    "encheu_vazou": 0.0
+  },
+  {
+    "data": "2026-06-29",
+    "nivel_rio": 28.5,
+    "encheu_vazou": -1.0
+  },
+  {
+    "data": "2026-06-30",
+    "nivel_rio": 28.5,
+    "encheu_vazou": 0.0
+  },
+  {
+    "data": "2026-07-01",
+    "nivel_rio": 28.5,
+    "encheu_vazou": 0.0
+  },
+  {
+    "data": "2026-07-02",
+    "nivel_rio": 28.5,
+    "encheu_vazou": 0.0
+  },
+  {
+    "data": "2026-07-03",
+    "nivel_rio": 28.49,
+    "encheu_vazou": -1.0
+  },
+  {
+    "data": "2026-07-04",
+    "nivel_rio": 28.47,
+    "encheu_vazou": -2.0
+  },
+  {
+    "data": "2026-07-05",
+    "nivel_rio": 28.45,
+    "encheu_vazou": -2.0
+  },
+  {
+    "data": "2026-07-06",
+    "nivel_rio": 28.43,
+    "encheu_vazou": -2.0
+  },
+  {
+    "data": "2026-07-07",
+    "nivel_rio": 28.4,
+    "encheu_vazou": -3.0
+  },
+  {
+    "data": "2026-07-08",
+    "nivel_rio": 28.38,
+    "encheu_vazou": -2.0
+  },
+  {
+    "data": "2026-07-09",
+    "nivel_rio": 28.36,
+    "encheu_vazou": -2.0
+  },
+  {
+    "data": "2026-07-10",
+    "nivel_rio": 28.34,
+    "encheu_vazou": -2.0
+  },
+  {
+    "data": "2026-07-11",
+    "nivel_rio": 28.31,
+    "encheu_vazou": -3.0
+  },
+  {
+    "data": "2026-07-12",
+    "nivel_rio": 28.28,
+    "encheu_vazou": -3.0
+  },
+  {
+    "data": "2026-07-13",
+    "nivel_rio": 28.25,
+    "encheu_vazou": -3.0
+  },
+  {
+    "data": "2026-07-14",
+    "nivel_rio": 28.22,
+    "encheu_vazou": -3.0
+  },
+  {
+    "data": "2026-07-15",
+    "nivel_rio": 28.19,
+    "encheu_vazou": -3.0
   }
 ]
