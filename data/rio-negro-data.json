@@ -48773,5 +48773,15 @@
     "data": "2026-09-16",
     "nivel_rio": 21.62,
     "encheu_vazou": -19.0
+  },
+  {
+    "data": "2026-09-17",
+    "nivel_rio": 21.44,
+    "encheu_vazou": -18.0
+  },
+  {
+    "data": "2026-09-18",
+    "nivel_rio": 21.26,
+    "encheu_vazou": -18.0
   }
 ]
